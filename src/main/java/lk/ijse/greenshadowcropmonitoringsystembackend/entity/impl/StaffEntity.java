@@ -3,6 +3,7 @@ package lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl;
 import jakarta.persistence.*;
 
 import lk.ijse.greenshadowcropmonitoringsystembackend.entity.Role;
+import lk.ijse.greenshadowcropmonitoringsystembackend.entity.SuperEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "staff")
-public class StaffEntity {
+public class StaffEntity implements SuperEntity {
     @Id
     @Column(length = 20)
     private String staffId;

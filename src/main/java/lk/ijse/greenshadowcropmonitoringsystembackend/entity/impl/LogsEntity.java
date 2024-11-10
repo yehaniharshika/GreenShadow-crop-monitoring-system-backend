@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import lk.ijse.greenshadowcropmonitoringsystembackend.entity.SuperEntity;
 import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.CropEntity;
 import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.FieldEntity;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "logs")
-public class LogsEntity {
+public class LogsEntity implements SuperEntity {
     @Id
     private String logCode;
     private Date logDate;
