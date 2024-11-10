@@ -18,7 +18,6 @@ import java.util.List;
 @Table(name = "staff")
 public class StaffEntity implements SuperEntity {
     @Id
-    @Column(length = 20)
     private String staffId;
 
     private String firstName;
