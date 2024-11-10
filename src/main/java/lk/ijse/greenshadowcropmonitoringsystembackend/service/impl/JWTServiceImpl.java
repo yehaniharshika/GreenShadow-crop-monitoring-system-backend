@@ -59,9 +59,20 @@ public class JWTServiceImpl implements JWTService {
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 
+
+    //validate token process
     @Override
     public boolean validateToken(String token, UserDetails userDetails) {
-        return false;
+        String userName = extractUserName(token);
+        return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+    private boolean isTokenExpired(String token){
+        return getExpiration(token).before(new Date());
+
+    }
+    //expired token true
+    private Date getExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
     }
 
     @Override
