@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
@@ -51,7 +53,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(String userId, UserDTO userDTO) {
+        Optional<UserEntity> tmpUser = userDAO.findById(userId);
 
+        if (tmpUser.isPresent()){
+            tmpUser.get().setName(userDTO.getUserId());
+            tmpUser.get().setEmail(userDTO.getEmail());
+            tmpUser.get().setPassword(userDTO.getPassword());
+            tmpUser.get().setRole(userDTO.getRole());
+        }
     }
 
     @Override
