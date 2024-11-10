@@ -1,3 +1,4 @@
+/*
 package lk.ijse.greenshadowcropmonitoringsystembackend.service.impl;
 
 import io.jsonwebtoken.Claims;
@@ -77,6 +78,18 @@ public class JWTServiceImpl implements JWTService {
 
     @Override
     public String refreshToken(UserDetails userDetails) {
-        return null;
+        return refreshToken(new HashMap<>(),userDetails);
+    }
+
+    private String refreshToken(Map<String, Object> genClaimsRefresh, UserDetails userDetails) {
+        genClaimsRefresh.put("role",userDetails.getAuthorities());
+        Date now = new Date();
+        Date refreshExpire = new Date(now.getTime() + 1000 * 600 * 600);
+
+        return Jwts.builder().setClaims(genClaimsRefresh)
+                .setSubject(userDetails.getUsername())
+                .setExpiration(refreshExpire)
+                .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 }
+*/

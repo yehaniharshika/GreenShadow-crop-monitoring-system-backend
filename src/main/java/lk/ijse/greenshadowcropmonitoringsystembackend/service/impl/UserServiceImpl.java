@@ -9,7 +9,7 @@ import lk.ijse.greenshadowcropmonitoringsystembackend.exception.DataPersistExcep
 import lk.ijse.greenshadowcropmonitoringsystembackend.service.UserService;
 import lk.ijse.greenshadowcropmonitoringsystembackend.util.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetailsService;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,8 +63,8 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Override
+    /*@Override
     public UserDetailsService userDetailsService() {
         return null;
-    }
+    }*/
 }
