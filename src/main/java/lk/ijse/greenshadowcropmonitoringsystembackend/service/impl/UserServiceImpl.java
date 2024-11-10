@@ -1,5 +1,6 @@
 package lk.ijse.greenshadowcropmonitoringsystembackend.service.impl;
 
+import lk.ijse.greenshadowcropmonitoringsystembackend.customStatusCodes.SelectedCustomErrorStatus;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dao.UserDAO;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.UserStatus;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.UserDTO;
@@ -39,7 +40,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserStatus getUser(String userId) {
-        return null;
+        if (userDAO.existsById(userId)){
+            UserEntity selectedUser = userDAO.getReferenceById(userId);
+            return mapping.toUserDTO(selectedUser);
+        }else {
+            //custom error status
+            return new SelectedCustomErrorStatus(2,"User- "+userId+" not found");
+        }
     }
 
     @Override
