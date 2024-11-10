@@ -4,6 +4,7 @@ import lk.ijse.greenshadowcropmonitoringsystembackend.dao.UserDAO;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.UserStatus;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.UserDTO;
 import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.UserEntity;
+import lk.ijse.greenshadowcropmonitoringsystembackend.exception.DataPersistException;
 import lk.ijse.greenshadowcropmonitoringsystembackend.service.UserService;
 import lk.ijse.greenshadowcropmonitoringsystembackend.util.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,11 @@ public class UserServiceImpl implements UserService {
     private Mapping mapping;
     @Override
     public void saveUser(UserDTO userDTO) {
-        UserEntity saveUser = userDAO.save()
+        UserEntity saveUser = userDAO.save(mapping.toUserEntity(userDTO));
+
+        if (saveUser == null){
+            throw  new DataPersistException("User not saved");
+        }
 
     }
 
