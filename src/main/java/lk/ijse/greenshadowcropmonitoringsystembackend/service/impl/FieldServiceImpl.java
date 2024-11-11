@@ -69,7 +69,7 @@ public class FieldServiceImpl implements FieldService {
     public void deleteField(String fieldCode) {
         Optional<FieldEntity> existedField = fieldDAO.findById(fieldCode);
         if (!existedField.isPresent()){
-            throw new FieldNotFoundException("FieldCode: "+fieldCode+" Field not fount");
+            throw new FieldNotFoundException("FieldCode: "+fieldCode+" Field not found");
         }else {
             fieldDAO.deleteById(fieldCode);
         }
