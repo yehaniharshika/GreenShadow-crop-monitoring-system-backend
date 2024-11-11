@@ -28,14 +28,14 @@ public class Mapping {
     }
 
     //For Field-mapping
-    public FieldEntity toUserEntity(FieldDTO fieldDTO){
+    public FieldEntity toFieldEntity(FieldDTO fieldDTO){
         return modelMapper.map(fieldDTO,FieldEntity.class);
     }
 
-    public FieldDTO toUserDTO(FieldEntity fieldEntity){
+    public FieldDTO toFieldDTO(FieldEntity fieldEntity){
         return modelMapper.map(fieldEntity,FieldDTO.class);
     }
-    
+
     public List<FieldDTO> asFieldDTOList(List<FieldEntity> fieldEntities){
         return modelMapper.map(fieldEntities,List.class);
     }
