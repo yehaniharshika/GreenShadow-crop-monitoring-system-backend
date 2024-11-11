@@ -1,6 +1,8 @@
 package lk.ijse.greenshadowcropmonitoringsystembackend.util;
 
+import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.FieldDTO;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.UserDTO;
+import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.FieldEntity;
 import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.UserEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,5 +25,18 @@ public class Mapping {
     }
     public List<UserDTO> asUserDTOList(List<UserEntity> userEntities){
         return modelMapper.map(userEntities,List.class);
+    }
+
+    //For Field-mapping
+    public FieldEntity toUserEntity(FieldDTO fieldDTO){
+        return modelMapper.map(fieldDTO,FieldEntity.class);
+    }
+
+    public FieldDTO toUserDTO(FieldEntity fieldEntity){
+        return modelMapper.map(fieldEntity,FieldDTO.class);
+    }
+    
+    public List<FieldDTO> asFieldDTOList(List<FieldEntity> fieldEntities){
+        return modelMapper.map(fieldEntities,List.class);
     }
 }
