@@ -3,6 +3,7 @@ package lk.ijse.greenshadowcropmonitoringsystembackend.controller;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.FieldStatus;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.FieldDTO;
 import lk.ijse.greenshadowcropmonitoringsystembackend.exception.DataPersistException;
+import lk.ijse.greenshadowcropmonitoringsystembackend.exception.FieldNotFoundException;
 import lk.ijse.greenshadowcropmonitoringsystembackend.service.FieldService;
 import lk.ijse.greenshadowcropmonitoringsystembackend.util.AppUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,7 +108,18 @@ public class FieldController {
         fieldService.updateField(fieldCode, buildFieldDTO);
     }
 
-
-
-
+    //delete field
+    @DeleteMapping(value = "/{fieldCode}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> deleteField(@PathVariable("fieldCode") String fieldCode){
+        try {
+            fieldService.deleteField(fieldCode);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (FieldNotFoundException e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
