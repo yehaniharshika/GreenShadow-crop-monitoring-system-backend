@@ -3,6 +3,7 @@ package lk.ijse.greenshadowcropmonitoringsystembackend.controller;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.UserStatus;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.UserDTO;
 import lk.ijse.greenshadowcropmonitoringsystembackend.exception.DataPersistException;
+import lk.ijse.greenshadowcropmonitoringsystembackend.exception.UserNotFoundException;
 import lk.ijse.greenshadowcropmonitoringsystembackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,6 +41,23 @@ public class UserController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UserDTO> getAllUsers(){
         return userService.getAllUsers();
+    }
+
+    @PutMapping(value = "/{userId}" ,consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> updateUser(@PathVariable("userId") String userId,@RequestBody UserDTO updateUserDTO){
+        try {
+            if (updateUserDTO == null){
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            userService.updateUser(userId,updateUserDTO);
+            return new ResponseEntity<>("update successfully",HttpStatus.OK);
+        }catch (UserNotFoundException e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }
