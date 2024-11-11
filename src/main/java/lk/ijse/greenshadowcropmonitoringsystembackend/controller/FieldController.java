@@ -72,5 +72,42 @@ public class FieldController {
         return  fieldService.getAllFields();
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping(value = "/{fieldCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void updateField(
+            @PathVariable("fieldCode") String fieldCode,
+            @RequestParam("fieldName") String fieldName,
+            @RequestParam("extentSize") String extentSize,
+            @RequestParam("fieldLocation") String fieldLocation,
+            @RequestPart("fieldImage1") MultipartFile fieldImage1,
+            @RequestPart("fieldImage2") MultipartFile fieldImage2
+    ) {
+        String base64FieldImage1 = "";
+        String base64FieldImage2 = "";
+
+        try {
+            byte[] bytesFieldImage1 = fieldImage1.getBytes();
+            byte[] bytesFieldImage2 = fieldImage2.getBytes();
+
+            base64FieldImage1 = AppUtil.fieldImageToBase64(bytesFieldImage1);
+            base64FieldImage2 = AppUtil.fieldImageToBase64(bytesFieldImage2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Build the object
+        var buildFieldDTO = new FieldDTO();
+        buildFieldDTO.setFieldCode(fieldCode);
+        buildFieldDTO.setFieldName(fieldName);
+        buildFieldDTO.setExtentSize(Double.valueOf(extentSize));
+        buildFieldDTO.setFieldLocation(fieldLocation);
+        buildFieldDTO.setFieldImage1(base64FieldImage1);
+        buildFieldDTO.setFieldImage2(base64FieldImage2);
+
+        fieldService.updateField(fieldCode, buildFieldDTO);
+    }
+
+
+
 
 }
