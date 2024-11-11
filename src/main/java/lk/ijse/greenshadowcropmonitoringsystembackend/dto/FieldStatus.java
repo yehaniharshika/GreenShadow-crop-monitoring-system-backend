@@ -1,4 +1,6 @@
 package lk.ijse.greenshadowcropmonitoringsystembackend.dto;
 
-public interface FieldStatus {
+import java.io.Serializable;
+
+public interface FieldStatus extends Serializable,SuperDTO {
 }
