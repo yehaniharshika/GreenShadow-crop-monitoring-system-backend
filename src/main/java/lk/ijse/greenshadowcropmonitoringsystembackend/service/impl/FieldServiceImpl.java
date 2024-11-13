@@ -2,9 +2,11 @@ package lk.ijse.greenshadowcropmonitoringsystembackend.service.impl;
 
 import lk.ijse.greenshadowcropmonitoringsystembackend.customStatusCodes.SelectedCustomErrorStatus;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dao.FieldDAO;
+import lk.ijse.greenshadowcropmonitoringsystembackend.dao.StaffDAO;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.FieldStatus;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.FieldDTO;
 import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.FieldEntity;
+import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.StaffEntity;
 import lk.ijse.greenshadowcropmonitoringsystembackend.exception.DataPersistException;
 import lk.ijse.greenshadowcropmonitoringsystembackend.exception.FieldNotFoundException;
 import lk.ijse.greenshadowcropmonitoringsystembackend.service.FieldService;
@@ -53,17 +55,26 @@ public class FieldServiceImpl implements FieldService {
 
     @Override
     public void updateField(String fieldCode, FieldDTO fieldDTO) {
-        //find field = tmpField
-        Optional<FieldEntity> tmpField = fieldDAO.findById(fieldCode);
+        // Find the existing field by fieldCode
+        Optional<FieldEntity> tmpFieldOptional = fieldDAO.findById(fieldCode);
 
-        if (tmpField.isPresent()){
-            tmpField.get().setFieldName(fieldDTO.getFieldName());
-            tmpField.get().setExtentSize(fieldDTO.getExtentSize());
-            tmpField.get().setFieldLocation(fieldDTO.getFieldLocation());
-            tmpField.get().setFieldImage1(fieldDTO.getFieldImage1());
-            tmpField.get().setFieldImage2(fieldDTO.getFieldImage2());
+        if (tmpFieldOptional.isPresent()) {
+            FieldEntity tmpField = tmpFieldOptional.get();
+
+            // Update basic fields
+            tmpField.setFieldName(fieldDTO.getFieldName());
+            tmpField.setExtentSize(fieldDTO.getExtentSize());
+            tmpField.setFieldLocation(fieldDTO.getFieldLocation());
+            tmpField.setFieldImage1(fieldDTO.getFieldImage1());
+            tmpField.setFieldImage2(fieldDTO.getFieldImage2());
+
+            // Save the updated field entity
+            fieldDAO.save(tmpField);
+        } else {
+            throw new RuntimeException("Field with code " + fieldCode + " not found.");
         }
     }
+
 
     @Override
     public void deleteField(String fieldCode) {

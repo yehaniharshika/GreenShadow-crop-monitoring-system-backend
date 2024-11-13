@@ -20,6 +20,7 @@ public class CropEntity implements SuperEntity {
     private String scientificName;
     private String category;
     private String cropSeason;
+
     @Column(columnDefinition = "LONGTEXT")
     private String CropImage;
 
@@ -30,9 +31,5 @@ public class CropEntity implements SuperEntity {
             inverseJoinColumns = @JoinColumn(name = "logCode")
     )
     private List<LogsEntity> logs;
-
-
-
-
-
+    
 }

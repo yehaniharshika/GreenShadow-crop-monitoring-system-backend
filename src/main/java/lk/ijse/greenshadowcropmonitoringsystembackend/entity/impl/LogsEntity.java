@@ -1,9 +1,6 @@
 package lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lk.ijse.greenshadowcropmonitoringsystembackend.entity.SuperEntity;
 import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.CropEntity;
 import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.FieldEntity;
@@ -24,13 +21,17 @@ public class LogsEntity implements SuperEntity {
     private String logCode;
     private Date logDate;
     private String logDetails;
+
+    @Column(columnDefinition = "LONGTEXT")
     private String observedImage;
-    @ManyToMany(mappedBy = "logs")
+
+    @ManyToMany(mappedBy = "logs",cascade = CascadeType.ALL)
     private List<CropEntity> crops;
 
-    @ManyToMany(mappedBy = "logs")
+    @ManyToMany(mappedBy = "logs",cascade = CascadeType.ALL)
     private List<FieldEntity> fields;
 
-    @ManyToMany(mappedBy = "logs")
+    @ManyToMany(mappedBy = "logs",cascade = CascadeType.ALL)
     private List<StaffEntity> staffEntities;
+
 }

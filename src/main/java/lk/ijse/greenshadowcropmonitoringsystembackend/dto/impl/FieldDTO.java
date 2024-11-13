@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -15,4 +17,5 @@ public class FieldDTO implements FieldStatus {
     private String fieldLocation;
     private String fieldImage1;
     private String fieldImage2;
+    private List<String> staff;
 }
