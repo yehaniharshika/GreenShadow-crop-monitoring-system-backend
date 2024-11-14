@@ -56,20 +56,20 @@ public class FieldServiceImpl implements FieldService {
     @Override
     public void updateField(String fieldCode, FieldDTO fieldDTO) {
         // Find the existing field by fieldCode
-        Optional<FieldEntity> tmpFieldOptional = fieldDAO.findById(fieldCode);
+        Optional<FieldEntity> tmpField = fieldDAO.findById(fieldCode);
 
-        if (tmpFieldOptional.isPresent()) {
-            FieldEntity tmpField = tmpFieldOptional.get();
+        if (tmpField.isPresent()) {
+            FieldEntity updateField = tmpField.get();
 
             // Update basic fields
-            tmpField.setFieldName(fieldDTO.getFieldName());
-            tmpField.setExtentSize(fieldDTO.getExtentSize());
-            tmpField.setFieldLocation(fieldDTO.getFieldLocation());
-            tmpField.setFieldImage1(fieldDTO.getFieldImage1());
-            tmpField.setFieldImage2(fieldDTO.getFieldImage2());
+            updateField.setFieldName(fieldDTO.getFieldName());
+            updateField.setExtentSize(fieldDTO.getExtentSize());
+            updateField.setFieldLocation(fieldDTO.getFieldLocation());
+            updateField.setFieldImage1(fieldDTO.getFieldImage1());
+            updateField.setFieldImage2(fieldDTO.getFieldImage2());
 
             // Save the updated field entity
-            fieldDAO.save(tmpField);
+            fieldDAO.save(updateField);
         } else {
             throw new RuntimeException("Field with code " + fieldCode + " not found.");
         }
