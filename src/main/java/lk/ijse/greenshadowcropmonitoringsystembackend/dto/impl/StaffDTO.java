@@ -1,5 +1,6 @@
 package lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.StaffStatus;
 import lk.ijse.greenshadowcropmonitoringsystembackend.entity.Role;
@@ -15,6 +16,8 @@ public class StaffDTO implements StaffStatus {
     private String staffId;
     private String firstName;
     private String lastName;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date DOB;
     private String gender;
     private String designation;
