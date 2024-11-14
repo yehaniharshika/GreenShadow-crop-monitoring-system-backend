@@ -1,8 +1,10 @@
 package lk.ijse.greenshadowcropmonitoringsystembackend.util;
 
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.FieldDTO;
+import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.StaffDTO;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.UserDTO;
 import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.FieldEntity;
+import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.StaffEntity;
 import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.UserEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,4 +41,18 @@ public class Mapping {
     public List<FieldDTO> asFieldDTOList(List<FieldEntity> fieldEntities){
         return modelMapper.map(fieldEntities,List.class);
     }
+
+    //For Staff-mapping
+    public StaffEntity toStaffEntity(StaffDTO staffDTO){
+        return modelMapper.map(staffDTO,StaffEntity.class);
+    }
+
+    public StaffDTO toStaffDTO(StaffEntity staffEntity){
+        return modelMapper.map(staffEntity,StaffDTO.class);
+    }
+
+    public List<StaffDTO> asStaffDTOList(List<StaffEntity> staffEntities){
+        return modelMapper.map(staffEntities,List.class);
+    }
+
 }
