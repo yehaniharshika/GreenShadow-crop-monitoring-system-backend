@@ -48,6 +48,7 @@ public class FieldServiceImpl implements FieldService {
         if (fieldDAO.existsById(fieldCode)){
             FieldEntity selectedField = fieldDAO.getReferenceById(fieldCode);
             return mapping.toFieldDTO(selectedField);
+
         }else {
             return new SelectedCustomErrorStatus(2,"FieldId: "+fieldCode+" field not found");
         }

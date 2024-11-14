@@ -30,7 +30,9 @@ public class StaffController {
         }
     }
 
-   /* @GetMapping(value = "/{staffId}",produces = MediaType.APPLICATION_JSON_VALUE)
-    public StaffStatus getSelectedStaff()*/
+    @GetMapping(value = "/{staffId}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public StaffStatus getSelectedStaff(@PathVariable("staffId") String staffId){
+        return staffService.getStaff(staffId);
+    }
 
 }
