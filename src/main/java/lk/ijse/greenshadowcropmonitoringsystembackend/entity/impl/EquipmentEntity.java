@@ -18,12 +18,12 @@ public class EquipmentEntity implements SuperEntity {
     private String type;
     private String status;
 
-    @ManyToOne
-    @JoinColumn(name = "staffId")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "staff_id")
     private StaffEntity staff;
 
-    @ManyToOne
-    @JoinColumn(name = "fieldCode")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "field_code")
     private FieldEntity field;
 
 }

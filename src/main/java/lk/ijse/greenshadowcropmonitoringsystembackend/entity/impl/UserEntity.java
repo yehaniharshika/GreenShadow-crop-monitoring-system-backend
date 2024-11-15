@@ -26,6 +26,6 @@ public class UserEntity implements SuperEntity {
     private Role role;
 
     @OneToOne
-    @JoinColumn(name = "staffId")
+    @JoinColumn(name = "staff_id")
     private StaffEntity staff;
 }

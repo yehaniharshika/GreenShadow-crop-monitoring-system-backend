@@ -24,12 +24,11 @@ public class CropEntity implements SuperEntity {
     @Column(columnDefinition = "LONGTEXT")
     private String CropImage;
 
-    @ManyToMany
-    @JoinTable(
-            name = "cropLogs_details",
-            joinColumns = @JoinColumn(name = "cropCode"),
-            inverseJoinColumns = @JoinColumn(name = "logCode")
-    )
+    @ManyToOne
+    @JoinColumn(name = "fieldCode")
+    private FieldEntity field;
+
+    @ManyToMany(mappedBy = "cropLogs",cascade = CascadeType.ALL)
     private List<LogsEntity> logs;
     
 }

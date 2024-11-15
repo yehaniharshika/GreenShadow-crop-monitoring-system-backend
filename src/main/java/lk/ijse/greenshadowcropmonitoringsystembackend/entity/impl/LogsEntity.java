@@ -9,7 +9,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,13 +27,26 @@ public class LogsEntity implements SuperEntity {
     @Column(columnDefinition = "LONGTEXT")
     private String observedImage;
 
-    @ManyToMany(mappedBy = "logs",cascade = CascadeType.ALL)
-    private List<CropEntity> crops;
+    @ManyToMany
+    @JoinTable(
+            name = "staff_logs_details",
+            joinColumns = @JoinColumn(name = "log_code"),
+            inverseJoinColumns = @JoinColumn(name = "staff_id")
+    )
+    private Set<StaffEntity> staffLogs = new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+            name = "field_logs_details",
+            joinColumns = @JoinColumn(name = "log_id"),
+            inverseJoinColumns = @JoinColumn(name = "field_code")
+    )
+    private Set<FieldEntity> fieldLogs = new HashSet<>();
 
-    @ManyToMany(mappedBy = "logs",cascade = CascadeType.ALL)
-    private List<FieldEntity> fields;
-
-    @ManyToMany(mappedBy = "logs",cascade = CascadeType.ALL)
-    private List<StaffEntity> staffEntities;
-
+    @ManyToMany
+    @JoinTable(
+            name = "crop_logs_details",
+            joinColumns = @JoinColumn(name = "log_id"),
+            inverseJoinColumns = @JoinColumn(name = "crop_code")
+    )
+    private Set<CropEntity> cropLogs = new HashSet<>();
 }

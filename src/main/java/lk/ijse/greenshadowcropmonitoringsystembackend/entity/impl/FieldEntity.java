@@ -6,7 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,7 +22,7 @@ public class FieldEntity implements SuperEntity {
     private String fieldName;
     private Double extentSize;
 
-    @Column(columnDefinition = "POINT")
+
     private String fieldLocation;
 
     @Column(columnDefinition = "LONGTEXT")
@@ -28,17 +31,21 @@ public class FieldEntity implements SuperEntity {
     @Column(columnDefinition = "LONGTEXT")
     private String fieldImage2;
 
-    @ManyToMany(mappedBy = "fields")
-    private List<StaffEntity> staff;
-
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "fieldLogs_details",
-            joinColumns = @JoinColumn(name = "fieldCode"),
-            inverseJoinColumns = @JoinColumn(name = "logCode")
+            name = "field_staff_details",
+            joinColumns = @JoinColumn(name = "field_code"),
+            inverseJoinColumns = @JoinColumn(name = "staff_id")
     )
+    private Set<StaffEntity> staff = new HashSet<>();
+
+    @OneToMany(mappedBy = "field", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CropEntity> crops ;
+
+    @ManyToMany(mappedBy = "fieldLogs",cascade = CascadeType.ALL)
     private List<LogsEntity> logs;
 
-    @OneToMany(mappedBy = "field")
+    @OneToMany(mappedBy = "field",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EquipmentEntity> equipments;
 }
+

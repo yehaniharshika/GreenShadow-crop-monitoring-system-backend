@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -44,28 +45,18 @@ public class StaffEntity implements SuperEntity {
 
     private String contactNumber;
 
-    @OneToOne(mappedBy = "staff")
+    @OneToOne(mappedBy = "staff",cascade = CascadeType.ALL, orphanRemoval = true)
     private UserEntity user;
 
-    @OneToMany(mappedBy = "staff",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "staff",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<VehicleEntity> vehicles;
 
-    @OneToMany(mappedBy = "staff")
+    @OneToMany(mappedBy = "staff",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<EquipmentEntity> equipments;
 
-    @ManyToMany
-    @JoinTable(
-            name = "staffFields_details",
-            joinColumns = @JoinColumn(name = "staffId"),
-            inverseJoinColumns = @JoinColumn(name = "fieldCode")
-    )
+    @ManyToMany(mappedBy = "staff",cascade = CascadeType.ALL)
     private List<FieldEntity> fields;
 
-    @ManyToMany
-    @JoinTable(
-            name = "staffLogs_details",
-            joinColumns = @JoinColumn(name = "staffId"),
-            inverseJoinColumns = @JoinColumn(name = "logCode")
-    )
+    @ManyToMany(mappedBy = "staffLogs",cascade = CascadeType.ALL)
     private List<LogsEntity> logs;
 }
