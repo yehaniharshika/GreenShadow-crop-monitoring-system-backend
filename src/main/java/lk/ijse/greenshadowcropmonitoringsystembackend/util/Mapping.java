@@ -7,6 +7,7 @@ import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.FieldEntity;
 import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.StaffEntity;
 import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.UserEntity;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -53,6 +54,10 @@ public class Mapping {
 
     public List<StaffDTO> asStaffDTOList(List<StaffEntity> staffEntities){
         return modelMapper.map(staffEntities,List.class);
+    }
+
+    public List<StaffDTO> asStaffDtoList(List<StaffEntity> staffEntities) {
+        return modelMapper.map(staffEntities, new TypeToken<List<StaffDTO>>() {}.getType());
     }
 
 }

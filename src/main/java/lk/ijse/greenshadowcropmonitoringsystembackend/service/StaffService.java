@@ -8,7 +8,7 @@ import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.StaffDTO;
 import java.util.List;
 
 public interface StaffService {
-    void saveStaff(StaffDTO staffDTO);
+    StaffDTO saveStaff(StaffDTO staffDTO);
     List<StaffDTO> getAllStaff();
     StaffStatus getStaff(String staffId);
     void updateStaff(String staffId,StaffDTO staffDTO);

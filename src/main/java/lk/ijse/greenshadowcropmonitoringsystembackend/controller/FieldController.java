@@ -1,7 +1,9 @@
 package lk.ijse.greenshadowcropmonitoringsystembackend.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.FieldStatus;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.FieldDTO;
+import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.StaffDTO;
 import lk.ijse.greenshadowcropmonitoringsystembackend.exception.DataPersistException;
 import lk.ijse.greenshadowcropmonitoringsystembackend.exception.FieldNotFoundException;
 import lk.ijse.greenshadowcropmonitoringsystembackend.service.FieldService;
@@ -15,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("api/v1/fields")
@@ -23,42 +26,45 @@ public class FieldController {
     @Autowired
     private FieldService fieldService;
 
+
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> saveField(
+    public ResponseEntity<String> saveField(
+            HttpServletRequest request,
             @RequestPart("fieldCode") String fieldCode,
             @RequestPart("fieldName") String fieldName,
             @RequestPart("extentSize") String extentSize,
             @RequestPart("fieldLocation") String fieldLocation,
             @RequestPart("fieldImage1") MultipartFile fieldImage1,
             @RequestPart("fieldImage2") MultipartFile fieldImage2
-    ){
-        String base64FieldImage1 = "";
-        String base64FieldImage2 = "";
+    ) {
+
         try {
-            byte [] bytesFieldImage1 = fieldImage1.getBytes();
-            byte [] bytesFieldImage2 = fieldImage2.getBytes();
 
-            base64FieldImage1 = AppUtil.fieldImageToBase64(bytesFieldImage1);
-            base64FieldImage2 = AppUtil.fieldImageToBase64(bytesFieldImage2);
+            //convert images to Base64 strings
+            String base64FieldImage1 = AppUtil.fieldImageToBase64(fieldImage1.getBytes());
+            String base64FieldImage2 = AppUtil.fieldImageToBase64(fieldImage2.getBytes());
 
-            var buildFieldDTO = new FieldDTO();
-
+            //Build the FieldDTO
+            FieldDTO buildFieldDTO = new FieldDTO();
             buildFieldDTO.setFieldCode(fieldCode);
             buildFieldDTO.setFieldName(fieldName);
-            buildFieldDTO.setExtentSize(Double.valueOf(extentSize));
+            buildFieldDTO.setExtentSize(Double.parseDouble(extentSize));
             buildFieldDTO.setFieldLocation(fieldLocation);
             buildFieldDTO.setFieldImage1(base64FieldImage1);
             buildFieldDTO.setFieldImage2(base64FieldImage2);
 
+            // Save the field entity
             fieldService.saveField(buildFieldDTO);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+
+            return new ResponseEntity<>("Field saved successfully", HttpStatus.CREATED);
+
         } catch (DataPersistException e) {
             e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }catch (Exception e){
+            return new ResponseEntity<>("failed to save field: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("An error occurred while saving the field", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -121,5 +127,11 @@ public class FieldController {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/{fieldCode}/staff")
+    public ResponseEntity<List<StaffDTO>> getStaffByFieldCode(@PathVariable("fieldCode") String fieldCode){
+        List<StaffDTO> staffList = fieldService.getStaffIdsByFieldCode(fieldCode);
+        return ResponseEntity.ok(staffList);
     }
 }

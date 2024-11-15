@@ -22,10 +22,10 @@ public class StaffController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
     produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> saveStaff(@RequestBody StaffDTO staffDTO){
+    public ResponseEntity<StaffDTO> saveStaff(@RequestBody StaffDTO staffDTO){
         try {
-            staffService.saveStaff(staffDTO);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            StaffDTO savedStaff = staffService.saveStaff(staffDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedStaff);
         }catch (DataPersistException e){
             return  new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }catch (Exception e){

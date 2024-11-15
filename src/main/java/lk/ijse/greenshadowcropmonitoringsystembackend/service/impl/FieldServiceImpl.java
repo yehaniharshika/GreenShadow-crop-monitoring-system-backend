@@ -5,9 +5,9 @@ import lk.ijse.greenshadowcropmonitoringsystembackend.dao.FieldDAO;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dao.StaffDAO;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.FieldStatus;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.FieldDTO;
+import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.StaffDTO;
 import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.FieldEntity;
 import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.StaffEntity;
-import lk.ijse.greenshadowcropmonitoringsystembackend.exception.DataPersistException;
 import lk.ijse.greenshadowcropmonitoringsystembackend.exception.FieldNotFoundException;
 import lk.ijse.greenshadowcropmonitoringsystembackend.service.FieldService;
 import lk.ijse.greenshadowcropmonitoringsystembackend.util.Mapping;
@@ -15,8 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -25,29 +25,74 @@ public class FieldServiceImpl implements FieldService {
     private FieldDAO fieldDAO;
 
     @Autowired
-    private Mapping mapping;
+    private StaffDAO staffDAO;
 
-    @Override
-    public void saveField(FieldDTO fieldDTO) {
-        FieldEntity saveField = fieldDAO.save(mapping.toFieldEntity(fieldDTO));
+    @Autowired
+    private Mapping fieldMapping;
 
-        if (saveField == null){
-            throw  new DataPersistException("Field not found");
+
+    public FieldDTO saveField(FieldDTO fieldDTO) {
+        // Convert DTO to entity
+        FieldEntity fieldEntity = fieldMapping.toFieldEntity(fieldDTO);
+
+        try {
+            Set<StaffEntity> staffEntities = new HashSet<>();
+            if (fieldDTO.getStaffIds() != null) {
+                for (String staffId : fieldDTO.getStaffIds()) {
+                    StaffEntity staff = staffDAO.findById(staffId)
+                            .orElseThrow(() -> new IllegalArgumentException("Staff not found with ID: " + staffId));
+                    staffEntities.add(staff);
+                }
+            }
+            fieldEntity.setStaff(staffEntities);
+            return fieldMapping.toFieldDTO(fieldDAO.save(fieldEntity));
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to save field with staff details",e);
         }
 
     }
 
+    /*@Override
+    public FieldDTO saveField(FieldDTO fieldDTO) {
+        // Convert DTO to Entity
+        FieldEntity saveField = fieldMapping.toFieldEntity(fieldDTO);
+
+        try {
+            // Fetch staff entities from database and associate with the field
+            List<StaffEntity> staffEntities = new ArrayList<>();
+            if (fieldDTO.getStaffIds() != null) {
+                for (String staffId : fieldDTO.getStaffIds()) {
+                    StaffEntity staff = staffDAO.findById(staffId)
+                            .orElseThrow(() -> new IllegalArgumentException("Staff not found with ID: " + staffId));
+                    staffEntities.add(staff);
+                }
+            }
+
+            // Set the staff entities list in FieldEntity
+            saveField.setStaff(staffEntities);
+
+            // Persist FieldEntity (will also save relationships in field_staff_details)
+            FieldEntity savedFieldEntity = fieldDAO.save(saveField);
+
+            // Return the saved field as DTO
+            return fieldMapping.toFieldDTO(savedFieldEntity);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to save field with staff details", e);
+        }
+    }*/
+
+
     @Override
     public List<FieldDTO> getAllFields() {
         List<FieldEntity> allFields = fieldDAO.findAll();
-        return mapping.asFieldDTOList(allFields);
+        return fieldMapping.asFieldDTOList(allFields);
     }
 
     @Override
     public FieldStatus getField(String fieldCode) {
         if (fieldDAO.existsById(fieldCode)){
             FieldEntity selectedField = fieldDAO.getReferenceById(fieldCode);
-            return mapping.toFieldDTO(selectedField);
+            return fieldMapping.toFieldDTO(selectedField);
 
         }else {
             return new SelectedCustomErrorStatus(2,"FieldId: "+fieldCode+" field not found");
@@ -62,12 +107,16 @@ public class FieldServiceImpl implements FieldService {
         if (tmpField.isPresent()) {
             FieldEntity updateField = tmpField.get();
 
-            // Update basic fields
             updateField.setFieldName(fieldDTO.getFieldName());
             updateField.setExtentSize(fieldDTO.getExtentSize());
             updateField.setFieldLocation(fieldDTO.getFieldLocation());
             updateField.setFieldImage1(fieldDTO.getFieldImage1());
             updateField.setFieldImage2(fieldDTO.getFieldImage2());
+
+            /*List<StaffEntity> staffEntities = fieldDTO.getStaff().stream()
+                    .map(staffId -> staffDAO.getReferenceById(staffId)) // uses a proxy to avoid unsaved entities
+                    .collect(Collectors.toList());
+            updateField.setStaff(staffEntities);*/
 
             // Save the updated field entity
             fieldDAO.save(updateField);
@@ -85,5 +134,13 @@ public class FieldServiceImpl implements FieldService {
         }else {
             fieldDAO.deleteById(fieldCode);
         }
+    }
+
+    @Override
+    public List<StaffDTO> getStaffIdsByFieldCode(String fieldCode) {
+        FieldEntity field = fieldDAO.findById(fieldCode)
+                .orElseThrow(() -> new IllegalArgumentException("Field not found with ID: " + fieldCode));
+
+        return fieldMapping.asStaffDtoList(new ArrayList<>(field.getStaff()));
     }
 }

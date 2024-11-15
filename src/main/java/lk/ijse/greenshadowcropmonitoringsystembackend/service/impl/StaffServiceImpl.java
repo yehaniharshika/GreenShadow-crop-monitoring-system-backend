@@ -29,11 +29,12 @@ public class StaffServiceImpl implements StaffService {
     private Mapping staffMapping;
 
     @Override
-    public void saveStaff(StaffDTO staffDTO) {
+    public StaffDTO saveStaff(StaffDTO staffDTO) {
         StaffEntity saveStaff = staffDAO.save(staffMapping.toStaffEntity(staffDTO));
         if (saveStaff == null){
             throw new DataPersistException("Staff not saved");
         }
+        return staffMapping.toStaffDTO(saveStaff);
     }
 
     @Override

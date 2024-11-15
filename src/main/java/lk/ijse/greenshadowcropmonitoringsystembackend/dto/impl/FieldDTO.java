@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,5 +18,5 @@ public class FieldDTO implements FieldStatus {
     private String fieldLocation;
     private String fieldImage1;
     private String fieldImage2;
-    private List<String> staff;
+    private Set<String> staffIds; //Many-To-Many relationship with Staff
 }
