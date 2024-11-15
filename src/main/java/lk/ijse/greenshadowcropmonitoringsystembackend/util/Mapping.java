@@ -1,8 +1,10 @@
 package lk.ijse.greenshadowcropmonitoringsystembackend.util;
 
+import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.CropDTO;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.FieldDTO;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.StaffDTO;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.UserDTO;
+import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.CropEntity;
 import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.FieldEntity;
 import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.StaffEntity;
 import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.UserEntity;
@@ -56,8 +58,24 @@ public class Mapping {
         return modelMapper.map(staffEntities,List.class);
     }
 
-    public List<StaffDTO> asStaffDtoList(List<StaffEntity> staffEntities) {
+    /*public List<StaffDTO> asStaffDtoList(List<StaffEntity> staffEntities) {
         return modelMapper.map(staffEntities, new TypeToken<List<StaffDTO>>() {}.getType());
+    }*/
+
+    //For Crop-mapping
+    public CropEntity toCropEntity(CropDTO cropDTO){
+        return modelMapper.map(cropDTO,CropEntity.class);
     }
+
+    public CropDTO toCropDTO(CropEntity cropEntity){
+        return modelMapper.map(cropEntity,CropDTO.class);
+    }
+
+    public List<CropDTO> asCropDTOList(List<CropEntity> cropEntities){
+        return modelMapper.map(cropEntities,List.class);
+    }
+
+
+
 
 }
