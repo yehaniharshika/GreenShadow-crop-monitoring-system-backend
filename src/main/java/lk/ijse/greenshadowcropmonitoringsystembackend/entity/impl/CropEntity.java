@@ -22,7 +22,7 @@ public class CropEntity implements SuperEntity {
     private String cropSeason;
 
     @Column(columnDefinition = "LONGTEXT")
-    private String CropImage;
+    private String cropImage;
 
     @ManyToOne
     @JoinColumn(name = "fieldCode")

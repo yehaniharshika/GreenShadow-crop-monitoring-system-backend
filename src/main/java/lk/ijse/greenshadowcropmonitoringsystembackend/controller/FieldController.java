@@ -30,7 +30,6 @@ public class FieldController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> saveField(
-            HttpServletRequest request,
             @RequestPart("fieldCode") String fieldCode,
             @RequestPart("fieldName") String fieldName,
             @RequestPart("extentSize") String extentSize,

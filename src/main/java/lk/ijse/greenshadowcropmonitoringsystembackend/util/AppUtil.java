@@ -8,4 +8,8 @@ public class AppUtil {
         return Base64.getEncoder().encodeToString(fieldImage);
     }
 
+    public static String cropImageToBase64(byte[] cropImage){
+        return Base64.getEncoder().encodeToString(cropImage);
+    }
+
 }

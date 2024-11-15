@@ -13,6 +13,6 @@ public class CropDTO implements CropStatus {
     private String scientificName;
     private String category;
     private String cropSeason;
-    private String CropImage;
+    private String cropImage;
     private String fieldCode;
 }
