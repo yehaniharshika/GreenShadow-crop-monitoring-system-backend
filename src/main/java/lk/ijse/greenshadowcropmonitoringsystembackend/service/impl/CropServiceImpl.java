@@ -3,13 +3,20 @@ package lk.ijse.greenshadowcropmonitoringsystembackend.service.impl;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.CropStatus;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.CropDTO;
 import lk.ijse.greenshadowcropmonitoringsystembackend.service.CropService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Service
+@Transactional
 public class CropServiceImpl implements CropService {
+
+
     @Override
     public void saveCrop(CropDTO cropDTO) {
-        
+
+
     }
 
     @Override
