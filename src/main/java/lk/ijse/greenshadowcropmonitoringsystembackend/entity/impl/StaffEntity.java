@@ -1,13 +1,12 @@
 package lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import lk.ijse.greenshadowcropmonitoringsystembackend.entity.Role;
 import lk.ijse.greenshadowcropmonitoringsystembackend.entity.SuperEntity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,7 +14,8 @@ import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "staff")
 public class StaffEntity implements SuperEntity {
@@ -55,7 +55,7 @@ public class StaffEntity implements SuperEntity {
     @OneToMany(mappedBy = "staff",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<EquipmentEntity> equipments;
 
-    @JsonIgnore
+
     @ManyToMany(mappedBy = "staff")
     private List<FieldEntity> fields;
 
