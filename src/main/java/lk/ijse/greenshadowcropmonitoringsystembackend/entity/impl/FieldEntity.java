@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lk.ijse.greenshadowcropmonitoringsystembackend.entity.SuperEntity;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -13,8 +16,7 @@ import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "field")
 public class FieldEntity implements SuperEntity {
@@ -38,6 +40,7 @@ public class FieldEntity implements SuperEntity {
             joinColumns = @JoinColumn(name = "field_code"),
             inverseJoinColumns = @JoinColumn(name = "staff_id")
     )
+    @ToString.Exclude
     private List<StaffEntity> staff;
 
     @OneToMany(mappedBy = "field", cascade = CascadeType.ALL, orphanRemoval = true)
