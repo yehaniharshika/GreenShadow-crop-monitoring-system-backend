@@ -21,7 +21,7 @@ public class CropController {
     @Autowired
     private CropService cropService;
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
+    /*@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> saveCrop(@RequestBody CropDTO cropDTO){
         try {
@@ -34,9 +34,9 @@ public class CropController {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
+    }*/
 
-    /*@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> saveCrop(
             @RequestPart("cropCode") String cropCode,
@@ -70,7 +70,7 @@ public class CropController {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }*/
+    }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<CropDTO> getAllCrops(){
