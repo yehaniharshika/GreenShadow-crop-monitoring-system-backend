@@ -43,20 +43,20 @@ public class FieldController {
     ) {
 
         try {
-            // Convert images to Base64 strings
+            //convert images to Base64 strings
             String base64FieldImage1 = AppUtil.fieldImageToBase64(fieldImage1.getBytes());
             String base64FieldImage2 = AppUtil.fieldImageToBase64(fieldImage2.getBytes());
 
-            // Parse the staff JSON into a list of StaffDTO objects
+            //parse the staff JSON into a list of StaffDTO objects
             ObjectMapper objectMapper = new ObjectMapper();
             List<StaffDTO> staffList = objectMapper.readValue(staffJson, new TypeReference<List<StaffDTO>>() {});
 
-            // Extract staff IDs from StaffDTO objects
+            //extract staff IDs from StaffDTO objects
             List<String> staffIds = staffList.stream()
                     .map(StaffDTO::getStaffId) // Extract staffId
                     .collect(Collectors.toList());
 
-            // Build the FieldDTO
+            //build the FieldDTO
             FieldDTO buildFieldDTO = new FieldDTO();
             buildFieldDTO.setFieldCode(fieldCode);
             buildFieldDTO.setFieldName(fieldName);
@@ -66,7 +66,7 @@ public class FieldController {
             buildFieldDTO.setFieldImage2(base64FieldImage2);
             buildFieldDTO.setStaff(staffIds);
 
-            // Save the field entity
+            //save the field
             fieldService.saveField(buildFieldDTO);
 
             return new ResponseEntity<>("Field saved successfully", HttpStatus.CREATED);
@@ -74,6 +74,49 @@ public class FieldController {
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>("An error occurred while saving the field: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping(value = "/{fieldCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> updateField(
+            @PathVariable("fieldCode") String fieldCode,
+            @RequestParam("fieldName") String fieldName,
+            @RequestParam("extentSize") String extentSize,
+            @RequestParam("fieldLocation") String fieldLocation,
+            @RequestPart("fieldImage1") MultipartFile fieldImage1,
+            @RequestPart("fieldImage2") MultipartFile fieldImage2,
+            @RequestPart("staff") String staffJson
+    ) {
+        try {
+            //convert images to Base64 strings
+            String base64FieldImage1 = AppUtil.fieldImageToBase64(fieldImage1.getBytes());
+            String base64FieldImage2 = AppUtil.fieldImageToBase64(fieldImage2.getBytes());
+
+            //parse the staff JSON into a list of StaffDTO objects
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<StaffDTO> staffList = objectMapper.readValue(staffJson, new TypeReference<List<StaffDTO>>() {});
+
+            //extract staff IDs from StaffDTO objects
+            List<String> staffIds = staffList.stream()
+                    .map(StaffDTO::getStaffId) // Extract staffId
+                    .collect(Collectors.toList());
+
+            //build the FieldDTO
+            FieldDTO buildFieldDTO = new FieldDTO();
+            buildFieldDTO.setFieldCode(fieldCode);
+            buildFieldDTO.setFieldName(fieldName);
+            buildFieldDTO.setExtentSize(Double.parseDouble(extentSize));
+            buildFieldDTO.setFieldLocation(fieldLocation);
+            buildFieldDTO.setFieldImage1(base64FieldImage1);
+            buildFieldDTO.setFieldImage2(base64FieldImage2);
+            buildFieldDTO.setStaff(staffIds);
+
+            fieldService.updateField(fieldCode, buildFieldDTO);
+
+            return new ResponseEntity<>("Field update successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Not update Field: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -86,41 +129,6 @@ public class FieldController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<FieldDTO> getAllFields(){
         return  fieldService.getAllFields();
-    }
-
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PutMapping(value = "/{fieldCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void updateField(
-            @PathVariable("fieldCode") String fieldCode,
-            @RequestParam("fieldName") String fieldName,
-            @RequestParam("extentSize") String extentSize,
-            @RequestParam("fieldLocation") String fieldLocation,
-            @RequestPart("fieldImage1") MultipartFile fieldImage1,
-            @RequestPart("fieldImage2") MultipartFile fieldImage2
-    ) {
-        String base64FieldImage1 = "";
-        String base64FieldImage2 = "";
-
-        try {
-            byte[] bytesFieldImage1 = fieldImage1.getBytes();
-            byte[] bytesFieldImage2 = fieldImage2.getBytes();
-
-            base64FieldImage1 = AppUtil.fieldImageToBase64(bytesFieldImage1);
-            base64FieldImage2 = AppUtil.fieldImageToBase64(bytesFieldImage2);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // Build the object
-        var buildFieldDTO = new FieldDTO();
-        buildFieldDTO.setFieldCode(fieldCode);
-        buildFieldDTO.setFieldName(fieldName);
-        buildFieldDTO.setExtentSize(Double.valueOf(extentSize));
-        buildFieldDTO.setFieldLocation(fieldLocation);
-        buildFieldDTO.setFieldImage1(base64FieldImage1);
-        buildFieldDTO.setFieldImage2(base64FieldImage2);
-
-        fieldService.updateField(fieldCode, buildFieldDTO);
     }
 
     //delete field
