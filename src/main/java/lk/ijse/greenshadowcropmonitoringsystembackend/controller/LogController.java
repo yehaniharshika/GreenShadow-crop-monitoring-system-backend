@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lk.ijse.greenshadowcropmonitoringsystembackend.dto.LogStatus;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.CropDTO;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.FieldDTO;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.LogDTO;
@@ -124,5 +125,15 @@ public class LogController {
         }
     }
 
-    @GetMapping
+    //Get selected log
+    @GetMapping(value = "/{logCode}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public LogStatus getSelectedLog(@PathVariable("logCode") String logCode){
+        return logService.getLog(logCode);
+    }
+
+    //Get all logs
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<LogDTO> getAllLogs(){
+        return logService.getAllLogs();
+    }
 }
