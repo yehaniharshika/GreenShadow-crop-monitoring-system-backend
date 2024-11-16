@@ -122,6 +122,7 @@ public class LogController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
+
+    @GetMapping
 }
