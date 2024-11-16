@@ -31,24 +31,17 @@ public class FieldServiceImpl implements FieldService {
     private Mapping fieldMapping;
 
 
-    public FieldDTO saveField(FieldDTO fieldDTO) {
-        // Convert DTO to entity
+    public void saveField(FieldDTO fieldDTO) {
+        //Convert DTO to entity
         FieldEntity fieldEntity = fieldMapping.toFieldEntity(fieldDTO);
 
-        try {
-            Set<StaffEntity> staffEntities = new HashSet<>();
-            if (fieldDTO.getStaffIds() != null) {
-                for (String staffId : fieldDTO.getStaffIds()) {
-                    StaffEntity staff = staffDAO.findById(staffId)
-                            .orElseThrow(() -> new IllegalArgumentException("Staff not found with ID: " + staffId));
-                    staffEntities.add(staff);
-                }
-            }
-            fieldEntity.setStaff(staffEntities);
-            return fieldMapping.toFieldDTO(fieldDAO.save(fieldEntity));
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to save field with staff details",e);
-        }
+        List<StaffEntity> staffEntities = fieldDTO.getStaff().stream()
+                .map(staffId -> staffDAO.getReferenceById(staffId)) // uses a proxy to avoid unsaved entities
+                .collect(Collectors.toList());
+        fieldEntity.setStaff(staffEntities);
+
+        // Save fieldEntity which now has managed StaffEntity references
+        fieldDAO.save(fieldEntity);
 
     }
 
@@ -102,26 +95,23 @@ public class FieldServiceImpl implements FieldService {
     @Override
     public void updateField(String fieldCode, FieldDTO fieldDTO) {
         // Find the existing field by fieldCode
-        Optional<FieldEntity> tmpField = fieldDAO.findById(fieldCode);
+        Optional<FieldEntity> findField = fieldDAO.findById(fieldCode);
 
-        if (tmpField.isPresent()) {
-            FieldEntity updateField = tmpField.get();
+        if (!findField.isPresent()) {
+            throw new FieldNotFoundException("field not found");
+        } else {
 
-            updateField.setFieldName(fieldDTO.getFieldName());
-            updateField.setExtentSize(fieldDTO.getExtentSize());
-            updateField.setFieldLocation(fieldDTO.getFieldLocation());
-            updateField.setFieldImage1(fieldDTO.getFieldImage1());
-            updateField.setFieldImage2(fieldDTO.getFieldImage2());
+            findField.get().setFieldName(fieldDTO.getFieldName());
+            findField.get().setExtentSize(fieldDTO.getExtentSize());
+            findField.get().setFieldLocation(fieldDTO.getFieldLocation());
+            findField.get().setFieldImage1(fieldDTO.getFieldImage1());
+            findField.get().setFieldImage2(fieldDTO.getFieldImage2());
 
-            /*List<StaffEntity> staffEntities = fieldDTO.getStaff().stream()
+            List<StaffEntity> staffEntities = fieldDTO.getStaff().stream()
                     .map(staffId -> staffDAO.getReferenceById(staffId)) // uses a proxy to avoid unsaved entities
                     .collect(Collectors.toList());
-            updateField.setStaff(staffEntities);*/
+            findField.get().setStaff(staffEntities);
 
-            // Save the updated field entity
-            fieldDAO.save(updateField);
-        } else {
-            throw new RuntimeException("Field with code " + fieldCode + " not found.");
         }
     }
 
@@ -138,10 +128,6 @@ public class FieldServiceImpl implements FieldService {
 
     @Override
     public List<StaffDTO> getStaffIdsByFieldCode(String fieldCode) {
-        /*FieldEntity field = fieldDAO.findById(fieldCode)
-                .orElseThrow(() -> new IllegalArgumentException("Field not found with ID: " + fieldCode));
-
-        return fieldMapping.asStaffDtoList(new ArrayList<>(field.getStaff()));*/
         return null;
     }
 }
