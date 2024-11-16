@@ -74,6 +74,42 @@ public class CropController {
         }
     }
 
+    //update crop
+    @PutMapping(value = "/{cropCode}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> updateCrop(
+            @RequestPart("cropCode") String cropCode,
+            @RequestPart("cropCommonName") String cropCommonName,
+            @RequestPart("scientificName") String scientificName,
+            @RequestPart("category") String category,
+            @RequestPart("cropSeason") String cropSeason,
+            @RequestPart("cropImage") MultipartFile cropImage,
+            @RequestPart("fieldCode") String fieldCode
+    ){
+
+        try {
+            String base64CropImage = AppUtil.cropImageToBase64(cropImage.getBytes());
+
+            //Build the CropDTO
+            CropDTO buildCropDTO = new CropDTO();
+            buildCropDTO.setCropCode(cropCode);
+            buildCropDTO.setCropCommonName(cropCommonName);
+            buildCropDTO.setScientificName(scientificName);
+            buildCropDTO.setCategory(category);
+            buildCropDTO.setCropSeason(cropSeason);
+            buildCropDTO.setCropImage(base64CropImage);
+            buildCropDTO.setFieldCode(fieldCode);
+
+            cropService.updateCrop(cropCode,buildCropDTO);
+            return new ResponseEntity<>("crop update successfully", HttpStatus.OK);
+        }catch (DataPersistException e){
+            e.printStackTrace();
+            return new ResponseEntity<>("Failed to update crop",HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     //get all crops
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<CropDTO> getAllCrops(){
@@ -100,8 +136,4 @@ public class CropController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
-
-
 }
