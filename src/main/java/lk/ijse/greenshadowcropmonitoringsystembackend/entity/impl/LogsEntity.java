@@ -2,16 +2,12 @@ package lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl;
 
 import jakarta.persistence.*;
 import lk.ijse.greenshadowcropmonitoringsystembackend.entity.SuperEntity;
-import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.CropEntity;
-import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.FieldEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,20 +29,21 @@ public class LogsEntity implements SuperEntity {
             joinColumns = @JoinColumn(name = "log_code"),
             inverseJoinColumns = @JoinColumn(name = "staff_id")
     )
-    private Set<StaffEntity> staffLogs = new HashSet<>();
+    private List<StaffEntity> staffLogs;
+
     @ManyToMany
     @JoinTable(
             name = "field_logs_details",
-            joinColumns = @JoinColumn(name = "log_id"),
+            joinColumns = @JoinColumn(name = "log_code"),
             inverseJoinColumns = @JoinColumn(name = "field_code")
     )
-    private Set<FieldEntity> fieldLogs = new HashSet<>();
+    private List<FieldEntity> fieldLogs;
 
     @ManyToMany
     @JoinTable(
             name = "crop_logs_details",
-            joinColumns = @JoinColumn(name = "log_id"),
+            joinColumns = @JoinColumn(name = "log_code"),
             inverseJoinColumns = @JoinColumn(name = "crop_code")
     )
-    private Set<CropEntity> cropLogs = new HashSet<>();
+    private List<CropEntity> cropLogs;
 }
