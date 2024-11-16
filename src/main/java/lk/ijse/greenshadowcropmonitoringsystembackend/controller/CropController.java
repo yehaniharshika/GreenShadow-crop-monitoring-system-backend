@@ -1,6 +1,8 @@
 package lk.ijse.greenshadowcropmonitoringsystembackend.controller;
 
+import lk.ijse.greenshadowcropmonitoringsystembackend.dto.CropStatus;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.CropDTO;
+import lk.ijse.greenshadowcropmonitoringsystembackend.exception.CropNotFoundException;
 import lk.ijse.greenshadowcropmonitoringsystembackend.exception.DataPersistException;
 import lk.ijse.greenshadowcropmonitoringsystembackend.service.CropService;
 import lk.ijse.greenshadowcropmonitoringsystembackend.util.AppUtil;
@@ -72,10 +74,34 @@ public class CropController {
         }
     }
 
+    //get all crops
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<CropDTO> getAllCrops(){
         return cropService.getAllCrops();
     }
+
+    //get selected crop
+    @GetMapping(value = "/{cropCode}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public CropStatus getSelectedCrop(@PathVariable("cropCode") String cropCode){
+        return cropService.getCrop(cropCode);
+    }
+
+    //delete crop
+    @DeleteMapping("/{cropCode}")
+    public ResponseEntity<String> deleteCrop(@PathVariable("cropCode") String cropCode){
+        try {
+            cropService.deleteCrop(cropCode);
+            return new ResponseEntity<>("crop deleted successfully",HttpStatus.OK);
+        }catch (CropNotFoundException e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
 
 
 }
