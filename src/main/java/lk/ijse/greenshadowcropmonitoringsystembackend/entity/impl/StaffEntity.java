@@ -56,7 +56,7 @@ public class StaffEntity implements SuperEntity {
     private List<EquipmentEntity> equipments;
 
 
-    @ManyToMany(mappedBy = "staff")
+    @ManyToMany(mappedBy = "staff",cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<FieldEntity> fields;
 

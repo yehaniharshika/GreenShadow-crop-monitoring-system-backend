@@ -10,6 +10,7 @@ import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.FieldDTO;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.LogDTO;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.StaffDTO;
 import lk.ijse.greenshadowcropmonitoringsystembackend.exception.DataPersistException;
+import lk.ijse.greenshadowcropmonitoringsystembackend.exception.LogNotFoundException;
 import lk.ijse.greenshadowcropmonitoringsystembackend.service.LogService;
 import lk.ijse.greenshadowcropmonitoringsystembackend.util.AppUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,5 +136,19 @@ public class LogController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<LogDTO> getAllLogs(){
         return logService.getAllLogs();
+    }
+
+    @DeleteMapping(value = "/{logCode}")
+    public ResponseEntity<String> deleteLog(@PathVariable("logCode") String logCode){
+        try {
+            logService.deleteLog(logCode);
+            return new ResponseEntity<>("Log deleted successfully",HttpStatus.OK);
+        }catch (LogNotFoundException e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
