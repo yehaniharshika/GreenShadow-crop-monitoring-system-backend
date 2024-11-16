@@ -1,13 +1,7 @@
 package lk.ijse.greenshadowcropmonitoringsystembackend.util;
 
-import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.CropDTO;
-import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.FieldDTO;
-import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.StaffDTO;
-import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.UserDTO;
-import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.CropEntity;
-import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.FieldEntity;
-import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.StaffEntity;
-import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.UserEntity;
+import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.*;
+import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.*;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +49,7 @@ public class Mapping {
     }
 
     public List<StaffDTO> asStaffDTOList(List<StaffEntity> staffEntities){
-        return modelMapper.map(staffEntities,List.class);
+        return modelMapper.map(staffEntities,new TypeToken<List<StaffDTO>>() {}.getType());
     }
 
     /*public List<StaffDTO> asStaffDtoList(List<StaffEntity> staffEntities) {
@@ -72,7 +66,20 @@ public class Mapping {
     }
 
     public List<CropDTO> asCropDTOList(List<CropEntity> cropEntities){
-        return modelMapper.map(cropEntities,List.class);
+        return modelMapper.map(cropEntities,new TypeToken<List<CropDTO>>() {}.getType());
+    }
+
+    //For Log-mapping
+    public LogsEntity toLogEntity(LogDTO logDTO){
+        return modelMapper.map(logDTO,LogsEntity.class);
+    }
+
+    public LogDTO toLogDTO(LogsEntity logsEntity){
+        return modelMapper.map(logsEntity,LogDTO.class);
+    }
+
+    public List<LogDTO> asLogDTOList(List<LogsEntity> logsEntities){
+        return modelMapper.map(logsEntities,new TypeToken<List<LogDTO>>() {}.getType());
     }
 
 
