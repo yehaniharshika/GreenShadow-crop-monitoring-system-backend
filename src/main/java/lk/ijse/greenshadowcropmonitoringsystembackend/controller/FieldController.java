@@ -1,5 +1,7 @@
 package lk.ijse.greenshadowcropmonitoringsystembackend.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.FieldStatus;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.FieldDTO;
@@ -18,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1/fields")
@@ -35,16 +38,25 @@ public class FieldController {
             @RequestPart("extentSize") String extentSize,
             @RequestPart("fieldLocation") String fieldLocation,
             @RequestPart("fieldImage1") MultipartFile fieldImage1,
-            @RequestPart("fieldImage2") MultipartFile fieldImage2
+            @RequestPart("fieldImage2") MultipartFile fieldImage2,
+            @RequestPart("staff") String staffJson
     ) {
 
         try {
-
-            //convert images to Base64 strings
+            // Convert images to Base64 strings
             String base64FieldImage1 = AppUtil.fieldImageToBase64(fieldImage1.getBytes());
             String base64FieldImage2 = AppUtil.fieldImageToBase64(fieldImage2.getBytes());
 
-            //Build the FieldDTO
+            // Parse the staff JSON into a list of StaffDTO objects
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<StaffDTO> staffList = objectMapper.readValue(staffJson, new TypeReference<List<StaffDTO>>() {});
+
+            // Extract staff IDs from StaffDTO objects
+            List<String> staffIds = staffList.stream()
+                    .map(StaffDTO::getStaffId) // Extract staffId
+                    .collect(Collectors.toList());
+
+            // Build the FieldDTO
             FieldDTO buildFieldDTO = new FieldDTO();
             buildFieldDTO.setFieldCode(fieldCode);
             buildFieldDTO.setFieldName(fieldName);
@@ -52,18 +64,16 @@ public class FieldController {
             buildFieldDTO.setFieldLocation(fieldLocation);
             buildFieldDTO.setFieldImage1(base64FieldImage1);
             buildFieldDTO.setFieldImage2(base64FieldImage2);
+            buildFieldDTO.setStaff(staffIds);
 
             // Save the field entity
             fieldService.saveField(buildFieldDTO);
 
             return new ResponseEntity<>("Field saved successfully", HttpStatus.CREATED);
 
-        } catch (DataPersistException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>("failed to save field: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>("An error occurred while saving the field", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("An error occurred while saving the field: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

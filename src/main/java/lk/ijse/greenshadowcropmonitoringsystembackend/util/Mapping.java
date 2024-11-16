@@ -36,7 +36,7 @@ public class Mapping {
     }
 
     public List<FieldDTO> asFieldDTOList(List<FieldEntity> fieldEntities){
-        return modelMapper.map(fieldEntities,List.class);
+        return modelMapper.map(fieldEntities,new TypeToken<List<FieldDTO>>() {}.getType());
     }
 
     //For Staff-mapping
@@ -52,9 +52,6 @@ public class Mapping {
         return modelMapper.map(staffEntities,new TypeToken<List<StaffDTO>>() {}.getType());
     }
 
-    /*public List<StaffDTO> asStaffDtoList(List<StaffEntity> staffEntities) {
-        return modelMapper.map(staffEntities, new TypeToken<List<StaffDTO>>() {}.getType());
-    }*/
 
     //For Crop-mapping
     public CropEntity toCropEntity(CropDTO cropDTO){
