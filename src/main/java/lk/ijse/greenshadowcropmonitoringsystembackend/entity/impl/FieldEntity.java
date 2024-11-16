@@ -37,7 +37,7 @@ public class FieldEntity implements SuperEntity {
             joinColumns = @JoinColumn(name = "field_code"),
             inverseJoinColumns = @JoinColumn(name = "staff_id")
     )
-    private Set<StaffEntity> staff = new HashSet<>();
+    private List<StaffEntity> staff;
 
     @OneToMany(mappedBy = "field", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CropEntity> crops ;

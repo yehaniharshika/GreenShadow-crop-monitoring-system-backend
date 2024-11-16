@@ -14,9 +14,9 @@ import java.util.Set;
 public class FieldDTO implements FieldStatus {
     private String fieldCode;
     private String fieldName;
-    private Double extentSize;
+    private double extentSize;
     private String fieldLocation;
     private String fieldImage1;
     private String fieldImage2;
-    private Set<String> staffIds; //Many-To-Many relationship with Staff
+    private List<String> staff; //Many-To-Many relationship with Staff
 }

@@ -56,7 +56,7 @@ public class StaffEntity implements SuperEntity {
     private List<EquipmentEntity> equipments;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "staff",cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "staff")
     private List<FieldEntity> fields;
 
     @ManyToMany(mappedBy = "staffLogs",cascade = CascadeType.ALL)
