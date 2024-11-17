@@ -23,10 +23,10 @@ public class UserServiceImpl implements UserService {
     private UserDAO userDAO;
 
     @Autowired
-    private Mapping mapping;
+    private Mapping userMapping;
     @Override
     public void saveUser(UserDTO userDTO) {
-        UserEntity saveUser = userDAO.save(mapping.toUserEntity(userDTO));
+        UserEntity saveUser = userDAO.save(userMapping.toUserEntity(userDTO));
 
         if (saveUser == null){
             throw  new DataPersistException("User not saved");
@@ -37,14 +37,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDTO> getAllUsers() {
         List<UserEntity> allUsers = userDAO.findAll();
-        return mapping.asUserDTOList(allUsers);
+        return userMapping.asUserDTOList(allUsers);
     }
 
     @Override
     public UserStatus getUser(String email) {
         if (userDAO.existsById(email)){
             UserEntity selectedUser = userDAO.getReferenceById(email);
-            return mapping.toUserDTO(selectedUser);
+            return userMapping.toUserDTO(selectedUser);
         }else {
             //custom error status
             return new SelectedCustomErrorStatus(2,"User not found");
