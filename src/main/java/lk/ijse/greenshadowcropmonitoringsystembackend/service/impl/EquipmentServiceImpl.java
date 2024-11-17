@@ -108,4 +108,20 @@ public class EquipmentServiceImpl implements EquipmentService {
         }
 
     }
+
+    @Override
+    public String generateNextEquipmentId() {
+        try {
+            String lastEquipmentId = equipmentDAO.getLastEquipmentId();
+            if (lastEquipmentId != null){
+                int nextEquipmentId = Integer.parseInt(lastEquipmentId.split("-")[1]) + 1;
+                return String.format("E00-%03d",nextEquipmentId);
+            }else {
+                return "E00-001";
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("Failed to generate next equipment Id",e);
+        }
+    }
 }
