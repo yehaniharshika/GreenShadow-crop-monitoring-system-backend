@@ -86,4 +86,20 @@ public class StaffServiceImpl implements StaffService {
         }
 
     }
+
+    @Override
+    public String generateNextStaffId() {
+        try {
+            String lastStaffId = staffDAO.getLastStaffId();
+            if (lastStaffId != null){
+                int nextStaffId = Integer.parseInt(lastStaffId.split("-")[1]) + 1;
+                return String.format("S00-%03d",nextStaffId);
+            }else {
+                return "S00-001";
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("Failed to generate next staff Id",e);
+        }
+    }
 }
