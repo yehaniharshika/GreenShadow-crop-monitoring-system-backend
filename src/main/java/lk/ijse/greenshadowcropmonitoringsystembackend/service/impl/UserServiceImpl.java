@@ -6,10 +6,12 @@ import lk.ijse.greenshadowcropmonitoringsystembackend.dto.UserStatus;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.UserDTO;
 import lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl.UserEntity;
 import lk.ijse.greenshadowcropmonitoringsystembackend.exception.DataPersistException;
+import lk.ijse.greenshadowcropmonitoringsystembackend.exception.UserNotFoundException;
 import lk.ijse.greenshadowcropmonitoringsystembackend.service.UserService;
 import lk.ijse.greenshadowcropmonitoringsystembackend.util.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,8 +65,9 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    /*@Override
+    @Override
     public UserDetailsService userDetailsService() {
-        return null;
-    }*/
+        return username -> userDAO.findByEmail(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+    }
 }
