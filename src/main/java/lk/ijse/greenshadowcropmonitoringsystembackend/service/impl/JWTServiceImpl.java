@@ -23,10 +23,10 @@ public class JWTServiceImpl implements JWTService {
 
     @Override
     public String extractUserName(String token) {
-
         return extractClaim(token,Claims::getSubject);
     }
 
+    //generate token
     @Override
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(),userDetails);
@@ -43,7 +43,8 @@ public class JWTServiceImpl implements JWTService {
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
 
     }
-    // actual process
+
+    //actual process
     private <T> T extractClaim(String token, Function<Claims,T> claimResolve) {
         final Claims claims = getAllClaims(token);
         return claimResolve.apply(claims);
@@ -58,6 +59,7 @@ public class JWTServiceImpl implements JWTService {
         byte[] decode = Decoders.BASE64.decode(jwtKey);
         return Keys.hmacShaKeyFor(decode);
     }
+
     private String generateToken(Map<String,Object> extractClaims, UserDetails userDetails){
         extractClaims.put("role",userDetails.getAuthorities());
         Date now = new Date();
@@ -70,6 +72,7 @@ public class JWTServiceImpl implements JWTService {
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
 
     }
+
     private String refreshToken(Map<String,Object> extractClaims,UserDetails userDetails){
         extractClaims.put("role",userDetails.getAuthorities());
         Date now = new Date();
@@ -81,9 +84,11 @@ public class JWTServiceImpl implements JWTService {
                 .setExpiration(refreshExpire)
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
+
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
+
     private Date extractExpiration(String token) {
         return extractClaim(token,Claims::getExpiration);
     }
