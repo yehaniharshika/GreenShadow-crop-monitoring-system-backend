@@ -29,7 +29,7 @@ public class JWTConfigFilter extends OncePerRequestFilter {
         String extractedJwtToken;
 
         //validate the token
-        if (StringUtils.isEmpty(initToken) || !initToken.startsWith("Bearer")){
+        if (StringUtils.isEmpty(initToken) || !initToken.startsWith("Bearer ")){
             //when implement this,pass to next filter
             filterChain.doFilter(request,response);
             return;
