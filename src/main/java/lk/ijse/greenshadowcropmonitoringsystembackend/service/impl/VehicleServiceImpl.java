@@ -34,7 +34,15 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public VehicleDTO saveVehicle(VehicleDTO vehicleDTO) {
-        VehicleEntity saveVehicle = vehicleDAO.save(vehicleMapping.toVehicleEntity(vehicleDTO));
+        VehicleEntity vehicleEntity = vehicleMapping.toVehicleEntity(vehicleDTO);
+        if (vehicleDTO.getStaffId() != null) {
+            StaffEntity staffEntity = staffDAO.findById(vehicleDTO.getStaffId()).orElseThrow(() ->
+                    new DataPersistException("Staff not found")
+            );
+            vehicleEntity.setStaff(staffEntity);
+        }
+
+        VehicleEntity saveVehicle = vehicleDAO.save(vehicleEntity);
         if (saveVehicle == null){
             throw new DataPersistException("Vehicle not saved");
         }
@@ -85,5 +93,21 @@ public class VehicleServiceImpl implements VehicleService {
             vehicleDAO.deleteById(vehicleCode);
         }
 
+    }
+
+    @Override
+    public String generateNextVehicleCode() {
+        try {
+            String lastVehicleCode = vehicleDAO.getLastVehicleCode();
+            if (lastVehicleCode != null){
+                int nextVehicleCode = Integer.parseInt(lastVehicleCode.split("-")[1]) + 1;
+                return String.format("V00-%03d",nextVehicleCode);
+            }else {
+                return "V00-001";
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("Failed to generate next vehicle code",e);
+        }
     }
 }

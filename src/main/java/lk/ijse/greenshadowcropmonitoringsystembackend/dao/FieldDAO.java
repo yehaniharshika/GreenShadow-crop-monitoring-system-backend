@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FieldDAO extends JpaRepository<FieldEntity,String> {
-
     @Query(value = "SELECT f.fieldCode FROM FieldEntity f ORDER BY f.fieldCode DESC LIMIT 1")
     String getLastFieldCode();
 }
