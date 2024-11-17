@@ -49,7 +49,7 @@ public class FieldEntity implements SuperEntity {
     @ManyToMany(mappedBy = "fieldLogs",cascade = CascadeType.ALL)
     private List<LogsEntity> logs;
 
-    @OneToMany(mappedBy = "field",cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "field",cascade = CascadeType.ALL)
     private List<EquipmentEntity> equipments;
 }
 

@@ -36,12 +36,30 @@ public class EquipmentServiceImpl implements EquipmentService {
     private FieldDAO fieldDAO;
 
     @Override
-    public void saveEquipment(EquipmentDTO equipmentDTO) {
-        EquipmentEntity saveEquipment = equipmentDAO.save(equipmentMapping.toEquipmentEntity(equipmentDTO));
-        if (saveEquipment == null){
+    public EquipmentDTO saveEquipment(EquipmentDTO equipmentDTO) {
+        EquipmentEntity equipmentEntity = equipmentMapping.toEquipmentEntity(equipmentDTO);
+
+        //maintain field and staff relationships
+        if (equipmentDTO.getFieldCode() != null) {
+            FieldEntity fieldEntity = fieldDAO.findById(equipmentDTO.getFieldCode()).orElseThrow(() ->
+                    new DataPersistException("Field not found")
+            );
+            equipmentEntity.setField(fieldEntity);
+        }
+        if (equipmentDTO.getStaffId() != null) {
+            StaffEntity staffEntity = staffDAO.findById(equipmentDTO.getStaffId()).orElseThrow(() ->
+                    new DataPersistException("Staff not found")
+            );
+            equipmentEntity.setStaff(staffEntity);
+        }
+
+        EquipmentEntity savedEntity = equipmentDAO.save(equipmentEntity);
+        if (savedEntity == null) {
             throw new DataPersistException("Equipment not saved");
         }
+        return equipmentMapping.toEquipmentDTO(savedEntity);
     }
+
 
     @Override
     public List<EquipmentDTO> getAllEquipments() {

@@ -6,7 +6,7 @@ import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.EquipmentDTO;
 import java.util.List;
 
 public interface EquipmentService {
-    void saveEquipment(EquipmentDTO equipmentDTO);
+    EquipmentDTO saveEquipment(EquipmentDTO equipmentDTO);
     List<EquipmentDTO> getAllEquipments();
     EquipmentStatus getEquipment(String equipmentId);
     void deleteEquipment(String equipmentId);
