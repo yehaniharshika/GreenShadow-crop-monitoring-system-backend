@@ -33,11 +33,12 @@ public class VehicleServiceImpl implements VehicleService {
     private StaffDAO staffDAO;
 
     @Override
-    public void saveVehicle(VehicleDTO vehicleDTO) {
+    public VehicleDTO saveVehicle(VehicleDTO vehicleDTO) {
         VehicleEntity saveVehicle = vehicleDAO.save(vehicleMapping.toVehicleEntity(vehicleDTO));
         if (saveVehicle == null){
             throw new DataPersistException("Vehicle not saved");
         }
+        return vehicleMapping.toVehicleDTO(saveVehicle);
     }
 
     @Override

@@ -49,10 +49,10 @@ public class StaffEntity implements SuperEntity {
     @OneToOne(mappedBy = "staff",cascade = CascadeType.ALL, orphanRemoval = true)
     private UserEntity user;
 
-    @OneToMany(mappedBy = "staff",cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "staff",cascade = CascadeType.ALL)
     private List<VehicleEntity> vehicles;
 
-    @OneToMany(mappedBy = "staff",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "staff",cascade = CascadeType.ALL)
     private List<EquipmentEntity> equipments;
 
 
