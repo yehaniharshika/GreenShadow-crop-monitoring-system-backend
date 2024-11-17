@@ -79,6 +79,18 @@ public class Mapping {
         return modelMapper.map(logsEntities,new TypeToken<List<LogDTO>>() {}.getType());
     }
 
+    //For Vehicle-mapping
+    public VehicleEntity toVehicleEntity(VehicleDTO vehicleDTO){
+        return modelMapper.map(vehicleDTO,VehicleEntity.class);
+    }
+
+    public VehicleDTO toVehicleDTO(VehicleEntity vehicleEntity){
+        return modelMapper.map(vehicleEntity,VehicleDTO.class);
+    }
+
+    public List<VehicleDTO> asVehicleDTOList(List<VehicleEntity> vehicleEntities){
+        return modelMapper.map(vehicleEntities,new TypeToken<List<VehicleDTO>>() {}.getType());
+    }
 
 
 
