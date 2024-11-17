@@ -26,6 +26,7 @@ public class Mapping {
         return modelMapper.map(userEntities,List.class);
     }
 
+
     //For Field-mapping
     public FieldEntity toFieldEntity(FieldDTO fieldDTO){
         return modelMapper.map(fieldDTO,FieldEntity.class);
@@ -38,6 +39,7 @@ public class Mapping {
     public List<FieldDTO> asFieldDTOList(List<FieldEntity> fieldEntities){
         return modelMapper.map(fieldEntities,new TypeToken<List<FieldDTO>>() {}.getType());
     }
+
 
     //For Staff-mapping
     public StaffEntity toStaffEntity(StaffDTO staffDTO){
@@ -66,6 +68,7 @@ public class Mapping {
         return modelMapper.map(cropEntities,new TypeToken<List<CropDTO>>() {}.getType());
     }
 
+
     //For Log-mapping
     public LogsEntity toLogEntity(LogDTO logDTO){
         return modelMapper.map(logDTO,LogsEntity.class);
@@ -78,6 +81,7 @@ public class Mapping {
     public List<LogDTO> asLogDTOList(List<LogsEntity> logsEntities){
         return modelMapper.map(logsEntities,new TypeToken<List<LogDTO>>() {}.getType());
     }
+
 
     //For Vehicle-mapping
     public VehicleEntity toVehicleEntity(VehicleDTO vehicleDTO){
@@ -93,5 +97,16 @@ public class Mapping {
     }
 
 
+    //For Equipment-mapping
+    public EquipmentEntity toEquipmentEntity(EquipmentDTO equipmentDTO){
+        return modelMapper.map(equipmentDTO,EquipmentEntity.class);
+    }
 
+    public EquipmentDTO toEquipmentDTO(EquipmentEntity equipmentEntity){
+        return modelMapper.map(equipmentEntity,EquipmentDTO.class);
+    }
+
+    public List<EquipmentDTO> asEquipmentDTOList(List<EquipmentEntity> equipmentEntities){
+        return modelMapper.map(equipmentEntities,new TypeToken<List<EquipmentDTO>>() {}.getType());
+    }
 }
