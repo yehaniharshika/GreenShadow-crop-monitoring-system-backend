@@ -136,7 +136,7 @@ public class FieldServiceImpl implements FieldService {
         try {
             String lastFieldCode = fieldDAO.getLastFieldCode();
             if (lastFieldCode != null){
-                int nextFieldCode = Integer.parseInt(lastFieldCode.split("-")[1] + 1);
+                int nextFieldCode = Integer.parseInt(lastFieldCode.split("-")[1]) + 1;
                 return String.format("F00-%03d",nextFieldCode);
             }else {
                 return "F00-001";
