@@ -84,7 +84,6 @@ public class StaffServiceImpl implements StaffService {
         }else {
             staffDAO.deleteById(staffId);
         }
-
     }
 
     @Override

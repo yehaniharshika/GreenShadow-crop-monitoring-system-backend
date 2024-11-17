@@ -85,4 +85,20 @@ public class CropServiceImpl implements CropService {
         }
 
     }
+
+    @Override
+    public String generateNextCropCode() {
+        try {
+            String lastCropCode = cropDAO.getLastCropCode();
+            if (lastCropCode != null){
+                int nextCropCode = Integer.parseInt(lastCropCode.split("-")[1]) + 1;
+                return String.format("C00-%03d",nextCropCode);
+            }else {
+                return "C00-001";
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("Failed to generate Crop code");
+        }
+    }
 }

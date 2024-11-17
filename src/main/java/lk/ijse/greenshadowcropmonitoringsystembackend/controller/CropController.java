@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/crops")
@@ -131,6 +133,20 @@ public class CropController {
         }catch (CropNotFoundException e){
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //get generate next crop code
+    @GetMapping(value = "/generate-next-crop-code",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, String>> generateNextCropCode(){
+        try {
+            String nextCropCode = cropService.generateNextCropCode();
+            Map<String, String> response = new HashMap<>();
+            response.put("cropCode",nextCropCode);
+            return new ResponseEntity<>(response,HttpStatus.OK);
         }catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
