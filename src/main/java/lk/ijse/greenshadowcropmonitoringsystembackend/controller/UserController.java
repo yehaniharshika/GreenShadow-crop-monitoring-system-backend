@@ -33,9 +33,9 @@ public class UserController {
         }
     }
 
-    @GetMapping(value = "/{userId}",produces = MediaType.APPLICATION_JSON_VALUE)
-    public UserStatus getSelectedUser(@PathVariable ("userId") String userId){
-        return userService.getUser(userId);
+    @GetMapping(value = "/{email}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public UserStatus getSelectedUser(@PathVariable ("email") String email){
+        return userService.getUser(email);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -43,13 +43,13 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @PutMapping(value = "/{userId}" ,consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> updateUser(@PathVariable("userId") String userId,@RequestBody UserDTO updateUserDTO){
+    @PutMapping(value = "/{email}" ,consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> updateUser(@PathVariable("email") String email,@RequestBody UserDTO updateUserDTO){
         try {
             if (updateUserDTO == null){
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-            userService.updateUser(userId,updateUserDTO);
+            userService.updateUser(email,updateUserDTO);
             return new ResponseEntity<>("update successfully",HttpStatus.OK);
         }catch (UserNotFoundException e){
             e.printStackTrace();

@@ -8,8 +8,8 @@ import java.util.List;
 public interface UserService {
     void saveUser(UserDTO userDTO);
     List<UserDTO> getAllUsers();
-    UserStatus getUser(String userId);
-    void updateUser(String userId,UserDTO userDTO);
+    UserStatus getUser(String email);
+    void updateUser(String email,UserDTO userDTO);
 
     //To Authorization part
     /*UserDetailsService userDetailsService();*/

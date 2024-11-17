@@ -15,11 +15,10 @@ import lombok.NoArgsConstructor;
 @Table(name = "user")
 public class UserEntity implements SuperEntity {
     @Id
-    private String userId;
+    private String email;
 
     private String name;
 
-    private String email;
     private String password;
 
     @Enumerated(EnumType.STRING)

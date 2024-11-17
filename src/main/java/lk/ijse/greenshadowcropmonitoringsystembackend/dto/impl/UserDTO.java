@@ -10,9 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class UserDTO implements UserStatus {
-    private String userId;
-    private String name;
     private String email;
+    private String name;
     private String password;
     private Role role;
 }

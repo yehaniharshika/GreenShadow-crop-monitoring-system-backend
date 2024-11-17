@@ -41,22 +41,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserStatus getUser(String userId) {
-        if (userDAO.existsById(userId)){
-            UserEntity selectedUser = userDAO.getReferenceById(userId);
+    public UserStatus getUser(String email) {
+        if (userDAO.existsById(email)){
+            UserEntity selectedUser = userDAO.getReferenceById(email);
             return mapping.toUserDTO(selectedUser);
         }else {
             //custom error status
-            return new SelectedCustomErrorStatus(2,"User- "+userId+" not found");
+            return new SelectedCustomErrorStatus(2,"User not found");
         }
     }
 
     @Override
-    public void updateUser(String userId, UserDTO userDTO) {
-        Optional<UserEntity> tmpUser = userDAO.findById(userId);
+    public void updateUser(String email, UserDTO userDTO) {
+        Optional<UserEntity> tmpUser = userDAO.findById(email);
 
         if (tmpUser.isPresent()){
-            tmpUser.get().setName(userDTO.getUserId());
+            tmpUser.get().setName(userDTO.getName());
             tmpUser.get().setEmail(userDTO.getEmail());
             tmpUser.get().setPassword(userDTO.getPassword());
             tmpUser.get().setRole(userDTO.getRole());
