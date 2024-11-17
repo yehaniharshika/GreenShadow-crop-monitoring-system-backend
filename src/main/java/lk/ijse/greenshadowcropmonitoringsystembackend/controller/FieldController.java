@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -150,5 +152,18 @@ public class FieldController {
     public ResponseEntity<List<StaffDTO>> getStaffByFieldCode(@PathVariable("fieldCode") String fieldCode){
         List<StaffDTO> staffList = fieldService.getStaffIdsByFieldCode(fieldCode);
         return ResponseEntity.ok(staffList);
+    }
+
+    @GetMapping(value ="/generate-next-field-code",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, String>> generateNextFieldCode(){
+        try {
+            String nextFieldCode = fieldService.generateNextFieldCode();
+            Map<String, String> response = new HashMap<>();
+            response.put("fieldCode",nextFieldCode);
+            return new ResponseEntity<>(response,HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

@@ -13,4 +13,5 @@ public interface FieldService {
     void updateField(String fieldCode,FieldDTO fieldDTO);
     void deleteField(String fieldCode);
     List<StaffDTO> getStaffIdsByFieldCode(String fieldCode);
+    String generateNextFieldCode();
 }
