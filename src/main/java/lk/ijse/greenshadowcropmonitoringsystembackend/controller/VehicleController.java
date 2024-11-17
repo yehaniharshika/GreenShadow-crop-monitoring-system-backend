@@ -53,7 +53,7 @@ public class VehicleController {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             vehicleService.updateVehicle(vehicleCode,updateVehicleDTO);
-            return new ResponseEntity<>("vehicle update successfully",HttpStatus.OK);
+            return new ResponseEntity<>("vehicle updated successfully",HttpStatus.OK);
         }catch (VehicleNotFoundException e){
             e.printStackTrace();
             return new ResponseEntity<>("vehicle not update",HttpStatus.BAD_REQUEST);
