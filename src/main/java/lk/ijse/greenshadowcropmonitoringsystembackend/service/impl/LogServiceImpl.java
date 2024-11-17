@@ -115,5 +115,21 @@ public class LogServiceImpl implements LogService {
         }
     }
 
+    @Override
+    public String generateNextLogCode() {
+        try {
+            String lastLogCode = logDAO.getLastLogCode();
+            if (lastLogCode != null){
+                int nextLogCode = Integer.parseInt(lastLogCode.split("-")[1]) + 1;
+                return String.format("L00-%03d",nextLogCode);
+            }else {
+                return "L00-001";
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw  new RuntimeException("Failed to generate next field code",e);
+        }
+    }
+
 
 }

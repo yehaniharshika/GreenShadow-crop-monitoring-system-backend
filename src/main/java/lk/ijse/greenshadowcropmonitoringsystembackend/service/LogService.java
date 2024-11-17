@@ -11,4 +11,5 @@ public interface LogService {
     LogStatus getLog(String logCode);
     void deleteLog(String logCode);
     void updateLog(String logCode, LogDTO logDTO);
+    String generateNextLogCode();
 }
