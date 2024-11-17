@@ -25,7 +25,7 @@ public class CropEntity implements SuperEntity {
     private String cropImage;
 
     @ManyToOne
-    @JoinColumn(name = "fieldCode")
+    @JoinColumn(name = "fieldCode",nullable = false)
     private FieldEntity field;
 
     @ManyToMany(mappedBy = "cropLogs",cascade = CascadeType.ALL)
