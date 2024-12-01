@@ -2,6 +2,7 @@ package lk.ijse.greenshadowcropmonitoringsystembackend.entity.impl;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 
 import lk.ijse.greenshadowcropmonitoringsystembackend.entity.Role;
@@ -18,6 +19,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "staff")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class StaffEntity implements SuperEntity {
     @Id
     private String staffId;

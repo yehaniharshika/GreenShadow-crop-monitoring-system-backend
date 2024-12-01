@@ -50,11 +50,11 @@ public class CropController {
             @RequestPart("cropSeason") String cropSeason,
             @RequestPart("cropImage") MultipartFile cropImage,
             @RequestPart("fieldCode") String fieldCode
-    ){
+    ) {
         try {
             String base64CropImage = AppUtil.cropImageToBase64(cropImage.getBytes());
 
-            //Build the CropDTO
+            // Build the CropDTO
             CropDTO buildCropDTO = new CropDTO();
             buildCropDTO.setCropCode(cropCode);
             buildCropDTO.setCropCommonName(cropCommonName);
@@ -65,35 +65,35 @@ public class CropController {
             buildCropDTO.setFieldCode(fieldCode);
 
             cropService.saveCrop(buildCropDTO);
-            return new ResponseEntity<>("crop saved successfully", HttpStatus.CREATED);
-        }catch (DataPersistException e){
+            return new ResponseEntity<>("Crop saved successfully", HttpStatus.CREATED);
+        } catch (DataPersistException e) {
             e.printStackTrace();
-            return new ResponseEntity<>("Failed to save crop",HttpStatus.BAD_REQUEST);
-
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to save crop: " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error occurred.");
         }
     }
 
+
     //update crop
-    @PutMapping(value = "/{cropCode}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    /*@PutMapping(value = "/{cropCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> updateCrop(
-            @RequestPart("cropCode") String cropCode,
+            @PathVariable("cropCode") String cropCode,
             @RequestPart("cropCommonName") String cropCommonName,
             @RequestPart("scientificName") String scientificName,
             @RequestPart("category") String category,
             @RequestPart("cropSeason") String cropSeason,
             @RequestPart("cropImage") MultipartFile cropImage,
             @RequestPart("fieldCode") String fieldCode
-    ){
-
+    ) {
         try {
+            // Convert cropImage to Base64 string
             String base64CropImage = AppUtil.cropImageToBase64(cropImage.getBytes());
 
-            //Build the CropDTO
+            // Build the CropDTO object
             CropDTO buildCropDTO = new CropDTO();
-            buildCropDTO.setCropCode(cropCode);
+            buildCropDTO.setCropCode(cropCode); // This comes from the path
             buildCropDTO.setCropCommonName(cropCommonName);
             buildCropDTO.setScientificName(scientificName);
             buildCropDTO.setCategory(category);
@@ -101,16 +101,55 @@ public class CropController {
             buildCropDTO.setCropImage(base64CropImage);
             buildCropDTO.setFieldCode(fieldCode);
 
-            cropService.updateCrop(cropCode,buildCropDTO);
-            return new ResponseEntity<>("crop update successfully", HttpStatus.OK);
-        }catch (DataPersistException e){
+            // Update the crop
+            cropService.updateCrop(cropCode, buildCropDTO);
+
+            return new ResponseEntity<>("Crop updated successfully", HttpStatus.OK);
+        } catch (DataPersistException e) {
             e.printStackTrace();
-            return new ResponseEntity<>("Failed to update crop",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Failed to update crop", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }*/
+    @PutMapping(value = "/{cropCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> updateCrop(
+            @PathVariable("cropCode") String cropCode,
+            @RequestPart("cropCommonName") String cropCommonName,
+            @RequestPart("scientificName") String scientificName,
+            @RequestPart("category") String category,
+            @RequestPart("cropSeason") String cropSeason,
+            @RequestPart(value = "cropImage", required = false) MultipartFile cropImage, // Optional
+            @RequestPart("fieldCode") String fieldCode
+    ) {
+        try {
+            String base64CropImage = null;
+            if (cropImage != null && !cropImage.isEmpty()) {
+                base64CropImage = AppUtil.cropImageToBase64(cropImage.getBytes());
+            }
+
+            CropDTO buildCropDTO = new CropDTO();
+            buildCropDTO.setCropCode(cropCode);
+            buildCropDTO.setCropCommonName(cropCommonName);
+            buildCropDTO.setScientificName(scientificName);
+            buildCropDTO.setCategory(category);
+            buildCropDTO.setCropSeason(cropSeason);
+            buildCropDTO.setCropImage(base64CropImage); // null if no image provided
+            buildCropDTO.setFieldCode(fieldCode);
+
+            cropService.updateCrop(cropCode, buildCropDTO);
+
+            return new ResponseEntity<>("Crop updated successfully", HttpStatus.OK);
+        } catch (DataPersistException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Failed to update crop", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     //get all crops
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)

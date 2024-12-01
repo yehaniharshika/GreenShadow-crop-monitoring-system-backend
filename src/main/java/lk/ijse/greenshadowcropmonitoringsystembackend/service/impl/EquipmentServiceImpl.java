@@ -14,6 +14,7 @@ import lk.ijse.greenshadowcropmonitoringsystembackend.exception.EquipmentNotFoun
 import lk.ijse.greenshadowcropmonitoringsystembackend.service.EquipmentService;
 import lk.ijse.greenshadowcropmonitoringsystembackend.util.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +36,7 @@ public class EquipmentServiceImpl implements EquipmentService {
     @Autowired
     private FieldDAO fieldDAO;
 
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR')")
     @Override
     public EquipmentDTO saveEquipment(EquipmentDTO equipmentDTO) {
         EquipmentEntity equipmentEntity = equipmentMapping.toEquipmentEntity(equipmentDTO);
@@ -60,13 +62,14 @@ public class EquipmentServiceImpl implements EquipmentService {
         return equipmentMapping.toEquipmentDTO(savedEntity);
     }
 
-
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR') or hasRole('SCIENTIST')")
     @Override
     public List<EquipmentDTO> getAllEquipments() {
         List<EquipmentEntity> allEquipments = equipmentDAO.findAll();
         return equipmentMapping.asEquipmentDTOList(allEquipments);
     }
 
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR') or hasRole('SCIENTIST')")
     @Override
     public EquipmentStatus getEquipment(String equipmentId) {
         if (equipmentDAO.existsById(equipmentId)){
@@ -77,6 +80,7 @@ public class EquipmentServiceImpl implements EquipmentService {
         }
     }
 
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR')")
     @Override
     public void deleteEquipment(String equipmentId) {
         Optional<EquipmentEntity> existedEquipment = equipmentDAO.findById(equipmentId);
@@ -87,6 +91,7 @@ public class EquipmentServiceImpl implements EquipmentService {
         }
     }
 
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR')")
     @Override
     public void updateEquipment(String equipmentId, EquipmentDTO equipmentDTO) {
         Optional<EquipmentEntity> findEquipment = equipmentDAO.findById(equipmentId);

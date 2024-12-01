@@ -19,6 +19,7 @@ import lk.ijse.greenshadowcropmonitoringsystembackend.exception.LogNotFoundExcep
 import lk.ijse.greenshadowcropmonitoringsystembackend.service.LogService;
 import lk.ijse.greenshadowcropmonitoringsystembackend.util.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +46,7 @@ public class LogServiceImpl implements LogService {
     @Autowired
     private StaffDAO staffDAO;
 
+    @PreAuthorize("hasRole('MANAGER') or hasRole('SCIENTIST')")
     @Override
     public void saveLog(LogDTO logDTO) {
         LogsEntity savedLog = logDAO.save(logMapping.toLogEntity(logDTO));
@@ -54,11 +56,13 @@ public class LogServiceImpl implements LogService {
 
     }
 
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR') or hasRole('SCIENTIST')")
     @Override
     public List<LogDTO> getAllLogs() {
         return logMapping.asLogDTOList(logDAO.findAll());
     }
 
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR') or hasRole('SCIENTIST')")
     @Override
     public LogStatus getLog(String logCode) {
         if (logDAO.existsById(logCode)){
@@ -69,6 +73,7 @@ public class LogServiceImpl implements LogService {
         }
     }
 
+    @PreAuthorize("hasRole('MANAGER') or hasRole('SCIENTIST')")
     @Override
     public void updateLog(String logCode, LogDTO logDTO) {
         Optional<LogsEntity> findLog = logDAO.findById(logCode);
@@ -105,6 +110,7 @@ public class LogServiceImpl implements LogService {
         }
     }
 
+    @PreAuthorize("hasRole('MANAGER') or hasRole('SCIENTIST')")
     @Override
     public void deleteLog(String logCode) {
         Optional<LogsEntity> existedLog = logDAO.findById(logCode);

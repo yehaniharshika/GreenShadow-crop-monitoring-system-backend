@@ -12,6 +12,7 @@ import lk.ijse.greenshadowcropmonitoringsystembackend.exception.FieldNotFoundExc
 import lk.ijse.greenshadowcropmonitoringsystembackend.service.FieldService;
 import lk.ijse.greenshadowcropmonitoringsystembackend.util.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +31,7 @@ public class FieldServiceImpl implements FieldService {
     @Autowired
     private Mapping fieldMapping;
 
-
+    @PreAuthorize("hasRole('MANAGER') or hasRole('SCIENTIST')")
     public void saveField(FieldDTO fieldDTO) {
         //Convert DTO to entity
         FieldEntity fieldEntity = fieldMapping.toFieldEntity(fieldDTO);
@@ -45,36 +46,8 @@ public class FieldServiceImpl implements FieldService {
 
     }
 
-    /*@Override
-    public FieldDTO saveField(FieldDTO fieldDTO) {
-        // Convert DTO to Entity
-        FieldEntity saveField = fieldMapping.toFieldEntity(fieldDTO);
 
-        try {
-            // Fetch staff entities from database and associate with the field
-            List<StaffEntity> staffEntities = new ArrayList<>();
-            if (fieldDTO.getStaffIds() != null) {
-                for (String staffId : fieldDTO.getStaffIds()) {
-                    StaffEntity staff = staffDAO.findById(staffId)
-                            .orElseThrow(() -> new IllegalArgumentException("Staff not found with ID: " + staffId));
-                    staffEntities.add(staff);
-                }
-            }
-
-            // Set the staff entities list in FieldEntity
-            saveField.setStaff(staffEntities);
-
-            // Persist FieldEntity (will also save relationships in field_staff_details)
-            FieldEntity savedFieldEntity = fieldDAO.save(saveField);
-
-            // Return the saved field as DTO
-            return fieldMapping.toFieldDTO(savedFieldEntity);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to save field with staff details", e);
-        }
-    }*/
-
-
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR') or hasRole('SCIENTIST')")
     @Override
     public List<FieldDTO> getAllFields() {
         List<FieldEntity> allFields = fieldDAO.findAll();
@@ -92,6 +65,7 @@ public class FieldServiceImpl implements FieldService {
         }
     }
 
+    @PreAuthorize("hasRole('MANAGER') or hasRole('SCIENTIST')")
     @Override
     public void updateField(String fieldCode, FieldDTO fieldDTO) {
         // Find the existing field by fieldCode
@@ -115,7 +89,7 @@ public class FieldServiceImpl implements FieldService {
         }
     }
 
-
+    @PreAuthorize("hasRole('MANAGER') or hasRole('SCIENTIST')")
     @Override
     public void deleteField(String fieldCode) {
         Optional<FieldEntity> existedField = fieldDAO.findById(fieldCode);

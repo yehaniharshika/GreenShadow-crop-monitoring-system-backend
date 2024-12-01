@@ -65,19 +65,24 @@ public class EquipmentController {
         }
     }
 
-    @DeleteMapping(value = "/{equipmentId}",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> deleteEquipment(@PathVariable("equipmentId") String equipmentId){
+    @DeleteMapping(value = "/{equipmentId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, String>> deleteEquipment(@PathVariable("equipmentId") String equipmentId) {
         try {
             equipmentService.deleteEquipment(equipmentId);
-            return new ResponseEntity<>("Equipment deleted successfully",HttpStatus.OK);
-        }catch (EquipmentNotFoundException e){
+
+            // Return a success message in JSON format
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Equipment deleted successfully");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (EquipmentNotFoundException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     //generate next equipment Id
     @GetMapping(value = "/generate-next-equipment-id",produces = MediaType.APPLICATION_JSON_VALUE)

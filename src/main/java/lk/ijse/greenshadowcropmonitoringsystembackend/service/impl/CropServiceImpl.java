@@ -13,6 +13,7 @@ import lk.ijse.greenshadowcropmonitoringsystembackend.exception.DataPersistExcep
 import lk.ijse.greenshadowcropmonitoringsystembackend.service.CropService;
 import lk.ijse.greenshadowcropmonitoringsystembackend.util.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +33,7 @@ public class CropServiceImpl implements CropService {
     @Autowired
     private FieldDAO fieldDAO;
 
+    @PreAuthorize("hasRole('MANAGER') or hasRole('SCIENTIST') or hasRole('ADMINISTRATOR')")
     @Override
     public void saveCrop(CropDTO cropDTO) {
         CropEntity savedCrop = cropDAO.save(cropMapping.toCropEntity(cropDTO));
@@ -40,12 +42,14 @@ public class CropServiceImpl implements CropService {
         }
     }
 
+    @PreAuthorize("hasRole('MANAGER') or hasRole('SCIENTIST') or hasRole('ADMINISTRATOR')")
     @Override
     public List<CropDTO> getAllCrops() {
         List<CropEntity> allCrops = cropDAO.findAll();
         return cropMapping.asCropDTOList(allCrops);
     }
 
+    @PreAuthorize("hasRole('MANAGER') or hasRole('SCIENTIST') or hasRole('ADMINISTRATOR')")
     @Override
     public CropStatus getCrop(String cropCode) {
         if (cropDAO.existsById(cropCode)){
@@ -56,16 +60,17 @@ public class CropServiceImpl implements CropService {
         }
     }
 
+    @PreAuthorize("hasRole('MANAGER') or hasRole('SCIENTIST')")
     @Override
     public void updateCrop(String cropCode, CropDTO cropDTO) {
         Optional<CropEntity> findCrop = cropDAO.findById(cropCode);
 
         if (findCrop.isPresent()){
             findCrop.get().setCropCommonName(cropDTO.getCropCommonName());
-            findCrop.get().setScientificName(cropDTO.getCropCommonName());
-            findCrop.get().setCategory(cropDTO.getCropCommonName());
-            findCrop.get().setCropSeason(cropDTO.getCropCommonName());
-            findCrop.get().setCropImage(cropDTO.getCropCommonName());
+            findCrop.get().setScientificName(cropDTO.getScientificName());
+            findCrop.get().setCategory(cropDTO.getCategory());
+            findCrop.get().setCropSeason(cropDTO.getCropSeason());
+            findCrop.get().setCropImage(cropDTO.getCropImage());
 
             FieldEntity field = fieldDAO.findById(cropDTO.getFieldCode())
                         .orElseThrow(() -> new IllegalArgumentException("Field not found"));
@@ -75,6 +80,7 @@ public class CropServiceImpl implements CropService {
         }
     }
 
+    @PreAuthorize("hasRole('MANAGER') or hasRole('SCIENTIST')")
     @Override
     public void deleteCrop(String cropCode) {
         Optional<CropEntity> existedCrop = cropDAO.findById(cropCode);

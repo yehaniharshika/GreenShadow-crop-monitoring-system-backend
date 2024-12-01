@@ -1,14 +1,17 @@
 package lk.ijse.greenshadowcropmonitoringsystembackend.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.StaffStatus;
 import lk.ijse.greenshadowcropmonitoringsystembackend.dto.impl.StaffDTO;
 import lk.ijse.greenshadowcropmonitoringsystembackend.exception.DataPersistException;
 import lk.ijse.greenshadowcropmonitoringsystembackend.exception.StaffNotFoundException;
 import lk.ijse.greenshadowcropmonitoringsystembackend.service.StaffService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -17,21 +20,26 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/staff")
+@RequiredArgsConstructor
 public class StaffController {
 
     @Autowired
     private StaffService staffService;
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
-    produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<StaffDTO> saveStaff(@RequestBody StaffDTO staffDTO){
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR') or hasRole('SCIENTIST')")
+    public ResponseEntity<StaffDTO> saveStaff(@RequestBody StaffDTO staffDTO, HttpServletRequest request) {
+        // Log the Authorization header for debugging
+        String authHeader = request.getHeader("Authorization");
+        System.out.println("Authorization Header: " + authHeader);
+
         try {
             StaffDTO savedStaff = staffService.saveStaff(staffDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedStaff);
-        }catch (DataPersistException e){
+        } catch (DataPersistException e) {
             e.printStackTrace();
-            return  new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

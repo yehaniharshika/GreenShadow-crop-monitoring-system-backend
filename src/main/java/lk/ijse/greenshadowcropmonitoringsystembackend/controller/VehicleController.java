@@ -65,19 +65,27 @@ public class VehicleController {
         }
     }
 
-    @DeleteMapping(value = "/{vehicleCode}",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> deleteVehicle(@PathVariable("vehicleCode") String vehicleCode){
+
+    @DeleteMapping(value = "/{vehicleCode}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, String>> deleteVehicle(@PathVariable("vehicleCode") String vehicleCode) {
         try {
             vehicleService.deleteVehicle(vehicleCode);
-            return new ResponseEntity<>("vehicle deleted successfully",HttpStatus.OK);
-        }catch (VehicleNotFoundException e){
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Vehicle deleted successfully");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (VehicleNotFoundException e) {
             e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }catch (Exception e){
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Vehicle not found");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "An unexpected error occurred");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     //generate next vehicle code
     @GetMapping(value = "/generate-next-vehicle-code",produces = MediaType.APPLICATION_JSON_VALUE)
