@@ -12,7 +12,6 @@ Green Shadow is a robust crop management system designed to streamline agricultu
 ### **Backend**
 - **Spring Boot**: REST API development with Hibernate for ORM
 - **MySQL**: Database management
-- **JWT**: Secure authentication 
 - **Gradle**: (Build automation)
 - **Lombok**: (Boilerplate reduction)
 - **JWT (JSON Web Token)**: (Authentication and Authorization)
@@ -29,37 +28,32 @@ Green Shadow is a robust crop management system designed to streamline agricultu
 - **Monitoring Logs**: Record observations and updates related to fields, crops, and staff.Add comments and upload images for detailed logs.
 - **Role-Based Access Control**: Permissions tailored to roles such as Manager, Administrator, and Scientist.
 
+## Installation Guide
+
+### Prerequisites
+
+1. **Java 21** - installed on your system.
+2. **Gradle** - installed or use the Gradle wrapper included in the project.
+3. **MySQL** - server running with a configured database.
+4. **Postman** - optional, for API end points testing.
+
+### Steps to Setup
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yehaniharshika/GreenShadow-crop-monitoring-system-backend.git
+   cd green-shadow
+   ```
+2. Configure the database in the `application.properties` file:
+   ```properties
+   spring.datasource.url=jdbc:mysql://localhost:3306/green_shadow
+   spring.datasource.username=your-username
+   spring.datasource.password=your-password
+   ```
 
 ## API Endpoints
 
-### 01. Staff Management
-
-- **POST** `/staff`: create a new staff.
-- **GET** `/staff`: Get all staff details.
-- **GET** `/staff/{staffId}`: Get a staff by using staff ID.
-- **GET** `/staff/generate-next-staff-id`: To get next staff ID.
-- **PUT** `/staff/{staffId}`: Update a staff by using staff ID.
-- **DELETE** `/staff/{staffId}`: Delete a staff by using staff ID.
-
-
-### 02. Item Management
-- **POST** `/items`: Add a new item.
-- **GET** `/items`: Get all items.
-- **GET** `/items/{itemCode}`: Get a item by using item Code.
-- **GET** `/items/generate-next-item-code`: To get next item code.
-- **PUT** `/items/{itemCode}`: Update a item by using item code.
-- **DELETE** `/items/{itemCode}`: Delete a item by using item code.
-
-### 03. Orders Management
-- **POST** `/orders`: Place a new order.
-- **GET** `/orders`: Get all orders.
-- **GET** `/orders/{orderId}`: Get a order by using order ID.
-- **GET** `/orders/generate-next-order-id`: To get next order Id.
-- **PUT** `/orders/{ordeId}`: Update a order by using order ID.
-- **DELETE** `/orders/{orderId}`: Delete a order by using order ID.
-
 You can view the detailed API documentation for the Green shadow-crop management system, which includes comprehensive example requests and responses, by visiting this link.<br>
-
+https://documenter.getpostman.com/view/36189376/2sAYBbcoao
 
 <br>
 The frontend code for the crop Monitoring System is available in a separate repository. You can find it by this link<br>
