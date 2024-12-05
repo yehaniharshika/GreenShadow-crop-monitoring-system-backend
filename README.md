@@ -63,6 +63,7 @@ You can view the detailed API documentation for the Green shadow-crop management
 
 <br>
 The frontend code for the crop Monitoring System is available in a separate repository. You can find it by this link<br>
+https://github.com/yehaniharshika/GreenShadow-crop-monitoring-system-frontend.git
 
 
 ## License
