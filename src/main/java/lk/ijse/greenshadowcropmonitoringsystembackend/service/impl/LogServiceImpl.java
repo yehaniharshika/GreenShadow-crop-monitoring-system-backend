@@ -49,7 +49,41 @@ public class LogServiceImpl implements LogService {
     @PreAuthorize("hasRole('MANAGER') or hasRole('SCIENTIST')")
     @Override
     public void saveLog(LogDTO logDTO) {
-        LogsEntity savedLog = logDAO.save(logMapping.toLogEntity(logDTO));
+        LogsEntity logsEntity = logMapping.toLogEntity(logDTO);
+
+        // Fetch and set Staff Entities
+        if (logDTO.getStaffLogs() != null && !logDTO.getStaffLogs().isEmpty()) {
+            List<StaffEntity> staffEntities = new ArrayList<>();
+            for (StaffDTO staffDTO : logDTO.getStaffLogs()) {
+                StaffEntity staffEntity = staffDAO.findById(staffDTO.getStaffId())
+                        .orElseThrow(() -> new DataPersistException("Staff not found with ID: " + staffDTO.getStaffId()));
+                staffEntities.add(staffEntity);
+            }
+            logsEntity.setStaffLogs(staffEntities);
+        }
+
+        // Fetch and set Field Entities
+        if (logDTO.getFieldLogs() != null && !logDTO.getFieldLogs().isEmpty()) {
+            List<FieldEntity> fieldEntities = new ArrayList<>();
+            for (FieldDTO fieldDTO : logDTO.getFieldLogs()) {
+                FieldEntity fieldEntity = fieldDAO.findById(fieldDTO.getFieldCode())
+                        .orElseThrow(() -> new DataPersistException("Field not found with Code: " + fieldDTO.getFieldCode()));
+                fieldEntities.add(fieldEntity);
+            }
+            logsEntity.setFieldLogs(fieldEntities);
+        }
+
+        // Fetch and set Crop Entities
+        if (logDTO.getCropLogs() != null && !logDTO.getCropLogs().isEmpty()) {
+            List<CropEntity> cropEntities = new ArrayList<>();
+            for (CropDTO cropDTO : logDTO.getCropLogs()) {
+                CropEntity cropEntity = cropDAO.findById(cropDTO.getCropCode())
+                        .orElseThrow(() -> new DataPersistException("Crop not found with Code: " + cropDTO.getCropCode()));
+                cropEntities.add(cropEntity);
+            }
+            logsEntity.setCropLogs(cropEntities);
+        }
+        LogsEntity savedLog = logDAO.save(logsEntity);
         if (savedLog == null){
             throw new DataPersistException("Log not saved");
         }

@@ -51,5 +51,6 @@ public class FieldEntity implements SuperEntity {
 
     @OneToMany(mappedBy = "field",cascade = CascadeType.ALL)
     private List<EquipmentEntity> equipments;
+
 }
 

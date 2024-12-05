@@ -102,7 +102,10 @@ public class FieldServiceImpl implements FieldService {
 
     @Override
     public List<StaffDTO> getStaffIdsByFieldCode(String fieldCode) {
-        return null;
+        FieldEntity field = fieldDAO.findById(fieldCode)
+                .orElseThrow(() -> new IllegalArgumentException("Field not found with ID: " + fieldCode));
+
+        return fieldMapping.asStaffDTOList(new ArrayList<>(field.getStaff()));
     }
 
     @Override

@@ -25,20 +25,6 @@ public class CropController {
     @Autowired
     private CropService cropService;
 
-    /*@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> saveCrop(@RequestBody CropDTO cropDTO){
-        try {
-            cropService.saveCrop(cropDTO);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        }catch (DataPersistException e){
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }catch (Exception e){
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }*/
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -77,42 +63,6 @@ public class CropController {
 
 
     //update crop
-    /*@PutMapping(value = "/{cropCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> updateCrop(
-            @PathVariable("cropCode") String cropCode,
-            @RequestPart("cropCommonName") String cropCommonName,
-            @RequestPart("scientificName") String scientificName,
-            @RequestPart("category") String category,
-            @RequestPart("cropSeason") String cropSeason,
-            @RequestPart("cropImage") MultipartFile cropImage,
-            @RequestPart("fieldCode") String fieldCode
-    ) {
-        try {
-            // Convert cropImage to Base64 string
-            String base64CropImage = AppUtil.cropImageToBase64(cropImage.getBytes());
-
-            // Build the CropDTO object
-            CropDTO buildCropDTO = new CropDTO();
-            buildCropDTO.setCropCode(cropCode); // This comes from the path
-            buildCropDTO.setCropCommonName(cropCommonName);
-            buildCropDTO.setScientificName(scientificName);
-            buildCropDTO.setCategory(category);
-            buildCropDTO.setCropSeason(cropSeason);
-            buildCropDTO.setCropImage(base64CropImage);
-            buildCropDTO.setFieldCode(fieldCode);
-
-            // Update the crop
-            cropService.updateCrop(cropCode, buildCropDTO);
-
-            return new ResponseEntity<>("Crop updated successfully", HttpStatus.OK);
-        } catch (DataPersistException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>("Failed to update crop", HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }*/
     @PutMapping(value = "/{cropCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> updateCrop(
             @PathVariable("cropCode") String cropCode,
