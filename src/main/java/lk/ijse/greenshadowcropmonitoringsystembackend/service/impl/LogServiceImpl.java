@@ -23,9 +23,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional
@@ -171,5 +169,38 @@ public class LogServiceImpl implements LogService {
         }
     }
 
+    @Override
+    public Map<String, Object> getRelatedEntitiesAsDtos(String logCode) {
+        Map<String, Object> relatedEntities = new HashMap<>();
+        List<FieldDTO> fieldDtos = null;
+        List<CropDTO> cropDtos = null;
+        List<StaffDTO> staffDtos = null;
+        Optional<LogsEntity> logEntity = logDAO.findById(logCode);
 
+        if (logEntity.isPresent()){
+            LogsEntity log = logEntity.get();
+
+            //convert PersistentSet to List
+            List<FieldEntity> fieldEntities = new ArrayList<>(log.getFieldLogs());
+            List<CropEntity> cropEntities = new ArrayList<>(log.getCropLogs());
+            List<StaffEntity> staffEntities = new ArrayList<>(log.getStaffLogs());
+
+            if (!fieldEntities.isEmpty()){
+                fieldDtos =  logMapping.asFieldDTOList(fieldEntities);
+            }
+            if ((!cropEntities.isEmpty())){
+                cropDtos = logMapping.asCropDTOList(cropEntities);
+            }
+            if (!staffEntities.isEmpty()){
+                staffDtos = logMapping.asStaffDTOList(staffEntities);
+            }
+
+        }
+
+        relatedEntities.put("fields", fieldDtos);
+        relatedEntities.put("crops", cropDtos);
+        relatedEntities.put("staff", staffDtos);
+
+        return relatedEntities;
+    }
 }

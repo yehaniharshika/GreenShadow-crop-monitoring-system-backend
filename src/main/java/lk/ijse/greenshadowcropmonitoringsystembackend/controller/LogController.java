@@ -185,4 +185,11 @@ public class LogController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/{logCode}/related-entities")
+    public ResponseEntity<Map<String, Object>> getRelatedEntities(@PathVariable String logCode) {
+        Map<String, Object> relatedEntities = logService.getRelatedEntitiesAsDtos(logCode);
+        return ResponseEntity.ok(relatedEntities);
+    }
+
 }
